@@ -5,7 +5,7 @@ import Lobby from "./lobby/Lobby";
 import { DOMAIN } from "../../constants/api";
 import useStore from "../../store";
 import Play from "./play/Play";
-import { GameState } from "../../constants/misc";
+import { GameResult, GameState, NotificationType } from "../../constants/misc";
 
 export default function Game() {
   const SOCKET_SERVER_URL = `${DOMAIN}/notification`;
@@ -16,14 +16,7 @@ export default function Game() {
   const [game, setGame] = useState(null);
 
   const [currentNotification, setCurrentNotification] = useState(null);
-  const NotificationType = {
-    PLAYER2_JOIN: "player2_join",
-  };
 
-  // States
-  /// Lobby - You can join or create a game
-  /// Play  - You're playing
-  /// Score - game is over, and score is being displayed
   const [currentGameState, setCurrentGameState] = useState(GameState.LOBBY);
 
   useEffect(() => {
@@ -67,39 +60,65 @@ export default function Game() {
     }
   }, [socket]);
 
+  /**
+   * Notification handler sets the latest notification to currentNotification
+   */
   const notificationHandler = (data) => {
     console.log("WS Notification", data);
-    setCurrentNotification(data);
 
-    if (data.type === NotificationType.PLAYER2_JOIN) {
-      if (data.payload.player1 && data.payload.player2) {
-        setCurrentNotification(data);
-      }
-    }
+    setCurrentNotification(data);
   };
 
-  useEffect(() => {
-    if (game) setCurrentGameState(GameState.PLAY);
-  }, [game]);
-
+  /**
+   * If the notication is related to current game, and the notification is for
+   * player 2's joining or a move by a player, then the payload will be set to
+   * the game state
+   */
   useEffect(() => {
     if (currentNotification) {
-      if (
-        currentNotification.type === NotificationType.PLAYER2_JOIN ||
-        currentNotification.type === NotificationType.MOVE
-      ) {
-        if (game && game.id === currentNotification.payload.id) {
+      if (game && game.id === currentNotification.payload.id) {
+        if (
+          currentNotification.type === NotificationType.PLAYER2_JOIN ||
+          currentNotification.type === NotificationType.MOVE
+        ) {
           setGame(currentNotification.payload);
         }
       }
     }
   }, [currentNotification]);
 
+  /**
+   * Updates the gameState according to what the result of the game is.
+   */
+  useEffect(() => {
+    if (game) {
+      console.log(game);
+
+      if (game.result === GameResult.PENDING) {
+        setCurrentGameState(GameState.PLAY);
+      } else {
+        setCurrentGameState(GameState.SCORE);
+      }
+    }
+  }, [game]);
+
+  useEffect(() => {
+    /**
+     * This makes sure that when the player comes back to the lobby, the game
+     * gets set to null. (otherwise the player will be taken back to the board
+     * when a MOVE notification has been received for that game, even after
+     * coming back to lobby)
+     */
+    if (currentGameState === GameState.LOBBY) setGame(null);
+  }, [currentGameState]);
+
   return currentGameState === GameState.LOBBY ? (
     <Lobby setGame={setGame} />
   ) : currentGameState === GameState.PLAY ? (
     <Play game={game} setCurrentGameState={setCurrentGameState} />
+  ) : currentGameState === GameState.SCORE ? (
+    <>Score Page</>
   ) : (
-    <></>
+    <>other</>
   );
 }

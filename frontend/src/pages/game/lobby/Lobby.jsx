@@ -4,7 +4,7 @@ import axios from "axios";
 import JoinGame from "./JoinGame";
 import CreateGame from "./CreateGame";
 import useStore from "../../../store";
-import { GET_GAMES_URL } from "../../../constants/api";
+import { GET_GAME_URL, GET_GAMES_URL } from "../../../constants/api";
 import authConfig from "../../../util/authConfig";
 
 const Lobby = ({ setGame }) => {
@@ -25,6 +25,15 @@ const Lobby = ({ setGame }) => {
       .finally(() => setIsLoading(false));
   }, []);
 
+  const fetchAndSetGame = (gameId) => {
+    setIsLoading(true);
+    axios
+      .get(GET_GAME_URL + gameId, authConfig(token))
+      .then(({ data }) => setGame(data))
+      .catch((error) => console.log("error", error))
+      .finally(() => setIsLoading(false));
+  };
+
   return (
     <div>
       <h1>Lobby</h1>
@@ -39,7 +48,7 @@ const Lobby = ({ setGame }) => {
           return (
             <p key={game.id}>
               <span>{game.id} = </span>
-              <a href="#" onClick={() => setGame(game)}>
+              <a href="#" onClick={() => fetchAndSetGame(game.id)}>
                 Join
               </a>
             </p>

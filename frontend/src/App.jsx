@@ -40,9 +40,9 @@ export default function App() {
         {token ? <button onClick={handleLogout}>Logout</button> : <></>}
       </nav>
       <Routes>
-        <Route path="/" element={<Navigate to="/play" replace />} />
+        <Route path="/" element={<Navigate to="/game" replace />} />
         <Route
-          path="/play"
+          path="/game"
           element={
             <AuthProtectedRoute>
               <Game />

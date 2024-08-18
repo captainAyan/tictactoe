@@ -1,13 +1,11 @@
-const validate = require("./ticTacToeBoardValidator");
-
-module.exports = class Game {
+class Game {
   constructor(gameId, player1) {
     this.id = gameId;
-    this.player1 = player1; // player with O
-    this.player2 = null; // player with X
+    this.player1 = player1; // player with noughts (O)
+    this.player2 = null; // player with crosses (X)
     this.board = ["", "", "", "", "", "", "", "", ""];
     this.player1HasNextMove = true;
-    this.isCompleted = false;
+    this.result = Game.Result.PENDING; // o | x | d | p
     this.timestamp = Date.now();
   }
 
@@ -22,19 +20,82 @@ module.exports = class Game {
     }
   }
 
-  addMove(player, move) {
-    if (this.player1Id !== null && this.player2Id !== null) {
-      // check if the move is valid
-      if (this.gameDate.board[move.position] !== "") {
-        throw new Error("Invalid move");
-      }
+  addMove(player, position) {
+    // both player have to be joined to make a move
+    if (!this.player1 || !this.player2)
+      throw new Error("Player 2 must be added before adding a move");
 
-      // add the move
-      this.board[move.position] = this.player1HasNextMove ? "o" : "x";
+    // check if game is already completed
+    if (this.result !== Game.Result.PENDING) throw new Error("Game is over");
 
-      // check if a player has won or not
+    // determining if player is player1 or player2
+    const playerIsPlayer1 = player.id === this.player1.id;
 
-      // if no winnings, then update the player1HasNextMove
-    } else throw new Error("Players are missing");
+    // making sure if the move by the correct player
+    if (playerIsPlayer1 !== this.player1HasNextMove)
+      throw new Error(
+        `Move is expected from ${
+          this.player1HasNextMove ? "Player 1" : "Player 2"
+        }`
+      );
+
+    // checking if the move is valid
+    if (position <= 8 && position >= 0 && this.board[position] !== "") {
+      throw new Error("Invalid move");
+    }
+
+    this.board[position] = this.player1HasNextMove
+      ? Game.Symbol.NOUGHT
+      : Game.Symbol.CROSS;
+    this.player1HasNextMove = !this.player1HasNextMove;
+
+    const result = Game.validate(this.board);
+    if (result) this.result = result;
   }
+}
+
+Game.Result = {
+  NOUGHT_WON: "o", // game ended in nought's victory
+  CROSS_WON: "x", // game ended in cross's victory
+  DRAW: "d", // game ended in draw
+  PENDING: "p", // result is pending (game is being played)
 };
+
+Game.Symbol = {
+  NOUGHT: "o",
+  CROSS: "x",
+};
+
+Game.validate = (board) => {
+  const winPossibilities = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+
+  let returnValue = false;
+
+  winPossibilities.forEach((winPossibility) => {
+    if (
+      board[winPossibility[0]] === board[winPossibility[1]] &&
+      board[winPossibility[0]] === board[winPossibility[2]]
+    ) {
+      returnValue = board[winPossibility[0]];
+    }
+  });
+
+  // check if it's a draw
+  if (!returnValue) {
+    const hasEmptySpot = board.some((str) => str === "");
+    if (!hasEmptySpot) return Game.Result.DRAW;
+  }
+
+  return returnValue;
+};
+
+module.exports = Game;

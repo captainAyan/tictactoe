@@ -18,6 +18,7 @@ export const DELETE_PROFILE_URL = `${BASE_PROFILE_URL}/`;
 
 export const BASE_GAME_URL = `${BASE_URL}/game`;
 export const CREATE_GAME_URL = `${BASE_GAME_URL}/`;
-export const JOIN_GAME_URL = `${BASE_GAME_URL}/join`;
+export const JOIN_GAME_URL = `${BASE_GAME_URL}/join/`;
+export const GET_GAME_URL = `${BASE_GAME_URL}/`;
 export const GET_GAMES_URL = `${BASE_GAME_URL}/`;
-export const ADD_MOVE_GAME_URL = `${BASE_GAME_URL}/move`;
+export const ADD_MOVE_GAME_URL = `${BASE_GAME_URL}/move/`;
