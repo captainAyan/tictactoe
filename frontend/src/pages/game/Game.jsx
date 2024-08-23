@@ -2,21 +2,21 @@ import { useEffect, useState } from "react";
 import { io } from "socket.io-client";
 
 import Lobby from "./lobby/Lobby";
+import Play from "./play/Play";
+import Score from "./score/Score";
 import { DOMAIN } from "../../constants/api";
 import useStore from "../../store";
-import Play from "./play/Play";
 import { GameResult, GameState, NotificationType } from "../../constants/misc";
 
 export default function Game() {
   const SOCKET_SERVER_URL = `${DOMAIN}/notification`;
   const [socket, setSocket] = useState(null);
-
-  const { token } = useStore((state) => state);
+  const { token, user } = useStore((state) => state);
 
   const [game, setGame] = useState(null);
+  const [rematchGame, setRematchGame] = useState(null);
 
   const [currentNotification, setCurrentNotification] = useState(null);
-
   const [currentGameState, setCurrentGameState] = useState(GameState.LOBBY);
 
   useEffect(() => {
@@ -83,6 +83,25 @@ export default function Game() {
         ) {
           setGame(currentNotification.payload);
         }
+      } else if (
+        currentNotification.payload.rematchToGameId === game.id &&
+        NotificationType.REMATCH
+      ) {
+        console.log("this is rematch notification");
+        // setGame(currentNotification.payload.newGame);
+
+        // if client is the creator, then go to the board, otherwise set rematch
+        if (currentNotification.payload.creator._id === user.id) {
+          console.log("YOU CREATED REMATCH");
+          setGame(currentNotification.payload.newGame);
+        } else setRematchGame(currentNotification.payload.newGame);
+      } else if (
+        rematchGame &&
+        rematchGame.id === currentNotification.payload.id
+      ) {
+        /// received a notification for a pending game
+        console.log("Notification for a waiting game");
+        setRematchGame(currentNotification.payload);
       }
     }
   }, [currentNotification]);
@@ -92,7 +111,7 @@ export default function Game() {
    */
   useEffect(() => {
     if (game) {
-      console.log(game);
+      console.log("updating game state");
 
       if (game.result === GameResult.PENDING) {
         setCurrentGameState(GameState.PLAY);
@@ -112,13 +131,30 @@ export default function Game() {
     if (currentGameState === GameState.LOBBY) setGame(null);
   }, [currentGameState]);
 
-  return currentGameState === GameState.LOBBY ? (
-    <Lobby setGame={setGame} />
-  ) : currentGameState === GameState.PLAY ? (
-    <Play game={game} setCurrentGameState={setCurrentGameState} />
-  ) : currentGameState === GameState.SCORE ? (
-    <>Score Page</>
-  ) : (
-    <>other</>
+  const goToLobby = () => setCurrentGameState(GameState.LOBBY);
+  const joinRematchGame = () => {
+    // TODO must fetch the rematch game before setting, so that it stays updated
+    setGame(rematchGame);
+    setRematchGame(null);
+  };
+
+  return (
+    <>
+      <p>{JSON.stringify(game)}</p>
+      <div>
+        {currentGameState === GameState.LOBBY ? (
+          <Lobby setGame={setGame} />
+        ) : currentGameState === GameState.PLAY ? (
+          <Play game={game} goToLobby={goToLobby} />
+        ) : currentGameState === GameState.SCORE ? (
+          <Score
+            game={game}
+            goToLobby={goToLobby}
+            hasRematchGame={rematchGame !== null}
+            joinRematchGame={joinRematchGame}
+          />
+        ) : null}
+      </div>
+    </>
   );
 }

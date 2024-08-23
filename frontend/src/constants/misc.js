@@ -16,4 +16,8 @@ export const GameResult = {
   PENDING: "p",
 };
 
-export const NotificationType = { PLAYER2_JOIN: "player2_join", MOVE: "move" };
+export const NotificationType = {
+  PLAYER2_JOIN: "player2_join",
+  MOVE: "move",
+  REMATCH: "rematch",
+};

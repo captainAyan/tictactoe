@@ -22,3 +22,4 @@ export const JOIN_GAME_URL = `${BASE_GAME_URL}/join/`;
 export const GET_GAME_URL = `${BASE_GAME_URL}/`;
 export const GET_GAMES_URL = `${BASE_GAME_URL}/`;
 export const ADD_MOVE_GAME_URL = `${BASE_GAME_URL}/move/`;
+export const REMATCH_GAME_URL = `${BASE_GAME_URL}/rematch/`;

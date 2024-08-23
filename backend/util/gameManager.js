@@ -1,7 +1,6 @@
 const { v4: uuid } = require("uuid");
 
 const Game = require("./Game");
-const { userSocketsList } = require("./userSocketsManager");
 
 // const gameList = [];
 const gameList = new Map();

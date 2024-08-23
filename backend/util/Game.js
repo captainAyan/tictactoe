@@ -1,6 +1,6 @@
 class Game {
   constructor(gameId, player1) {
-    this.id = gameId;
+    this.id = gameId; // this ID is for the live game not for database
     this.player1 = player1; // player with noughts (O)
     this.player2 = null; // player with crosses (X)
     this.board = ["", "", "", "", "", "", "", "", ""];
@@ -66,6 +66,7 @@ Game.Symbol = {
   CROSS: "x",
 };
 
+// TODO this doesn't work if the board is like ["o","o","o","","x","x","","",""]
 Game.validate = (board) => {
   const winPossibilities = [
     [0, 1, 2],
@@ -83,7 +84,8 @@ Game.validate = (board) => {
   winPossibilities.forEach((winPossibility) => {
     if (
       board[winPossibility[0]] === board[winPossibility[1]] &&
-      board[winPossibility[0]] === board[winPossibility[2]]
+      board[winPossibility[0]] === board[winPossibility[2]] &&
+      board[winPossibility[0]] !== ""
     ) {
       returnValue = board[winPossibility[0]];
     }
