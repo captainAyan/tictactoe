@@ -17,7 +17,7 @@ export const GameResult = {
 };
 
 export const NotificationType = {
-  PLAYER2_JOIN: "player2_join",
+  PLAYER_JOIN: "player_join",
   MOVE: "move",
   REMATCH: "rematch",
 };

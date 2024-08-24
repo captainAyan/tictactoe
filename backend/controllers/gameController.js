@@ -1,12 +1,14 @@
 const { StatusCodes } = require("http-status-codes");
+const { v4: uuid } = require("uuid");
 
 const {
-  createGame: _createGame,
+  addGame,
   getGameById,
   getGamesByPlayerId,
 } = require("../util/gameManager");
 const { userSocketsList } = require("../util/userSocketsManager");
 const { ErrorResponse } = require("../middlewares/errorMiddleware");
+const Game = require("../util/Game");
 
 const getGames = (req, res, next) => {
   const games = getGamesByPlayerId(req.user.id);
@@ -28,7 +30,11 @@ const getGame = (req, res, next) => {
 };
 
 const createGame = (req, res, next) => {
-  const game = _createGame(req.user);
+  const game = new Game(uuid());
+  game.addPlayer1(req.user);
+
+  addGame(game);
+
   res.json(game);
 };
 
@@ -41,13 +47,15 @@ const joinGame = (req, res, next) => {
     throw new ErrorResponse("Game doesn't exist", StatusCodes.NOT_FOUND);
 
   try {
-    // addPlayer2 can throw error
-    game.addPlayer2(req.user);
+    // if player1 is not null, then try adding user as player2
+    if (game.player1) game.addPlayer2(req.user);
+    else game.addPlayer1(req.user);
   } catch (error) {
     throw new ErrorResponse(error.message, StatusCodes.BAD_REQUEST);
   }
 
-  userSocketsList.get(game.player1.id).notify("player2_join", game);
+  userSocketsList.get(game.player1.id).notify("player_join", game);
+  userSocketsList.get(game.player2.id).notify("player_join", game);
   res.json(game);
 };
 
@@ -79,8 +87,13 @@ const createRematchGame = (req, res, next) => {
   if (!game)
     throw new ErrorResponse("Game doesn't exits", StatusCodes.NOT_FOUND);
 
-  const newGame = _createGame(game.player2);
-  newGame.addPlayer2(game.player1);
+  const newGame = new Game(uuid());
+  addGame(newGame);
+
+  // if rematch initiator is player1, make them player2
+  // else if rematch initiator is player2, make them player1
+  if (game.player1.id === req.user.id) newGame.addPlayer2(req.user);
+  else newGame.addPlayer1(req.user);
 
   userSocketsList
     .get(game.player1.id)

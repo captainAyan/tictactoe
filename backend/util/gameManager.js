@@ -1,16 +1,8 @@
-const { v4: uuid } = require("uuid");
-
-const Game = require("./Game");
-
 // const gameList = [];
 const gameList = new Map();
 
-function createGame(player1) {
-  const gameId = uuid();
-  const game = new Game(gameId, player1);
-
-  gameList.set(gameId, game);
-
+function addGame(game) {
+  gameList.set(game.id, game);
   return game;
 }
 
@@ -22,19 +14,7 @@ function getGamesByPlayerId(playerId) {
   const filteredGameList = [];
 
   gameList.forEach((game) => {
-    if (game.player1.id === playerId || game.player2?.id === playerId) {
-      filteredGameList.push(game);
-    }
-  });
-
-  return filteredGameList;
-}
-
-function getGamesByCreatorId(playerId) {
-  const filteredGameList = [];
-
-  gameList.forEach((game) => {
-    if (game.player1.id === playerId) {
+    if (game.player1?.id === playerId || game.player2?.id === playerId) {
       filteredGameList.push(game);
     }
   });
@@ -43,8 +23,7 @@ function getGamesByCreatorId(playerId) {
 }
 
 module.exports = {
-  createGame,
+  addGame,
   getGameById,
   getGamesByPlayerId,
-  getGamesByCreatorId,
 };

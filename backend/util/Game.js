@@ -1,7 +1,7 @@
 class Game {
-  constructor(gameId, player1) {
+  constructor(gameId) {
     this.id = gameId; // this ID is for the live game not for database
-    this.player1 = player1; // player with noughts (O)
+    this.player1 = null; // player with noughts (O)
     this.player2 = null; // player with crosses (X)
     this.board = ["", "", "", "", "", "", "", "", ""];
     this.player1HasNextMove = true;
@@ -9,8 +9,18 @@ class Game {
     this.timestamp = Date.now();
   }
 
+  addPlayer1(player1) {
+    if (this.player2 && this.player2.id === player1.id) {
+      throw new Error("Player 1 and player 2 cannot be the same");
+    } else if (this.player1) {
+      throw new Error("Player 1 has already joined the game");
+    } else {
+      this.player1 = player1;
+    }
+  }
+
   addPlayer2(player2) {
-    if (this.player1.id === player2.id) {
+    if (this.player1 && this.player1.id === player2.id) {
       throw new Error("Player 1 and player 2 cannot be the same user");
     } else if (this.player2) {
       // player2 has already joined the game
@@ -23,7 +33,7 @@ class Game {
   addMove(player, position) {
     // both player have to be joined to make a move
     if (!this.player1 || !this.player2)
-      throw new Error("Player 2 must be added before adding a move");
+      throw new Error("Both player must be added before adding a move");
 
     // check if game is already completed
     if (this.result !== Game.Result.PENDING) throw new Error("Game is over");
@@ -66,7 +76,6 @@ Game.Symbol = {
   CROSS: "x",
 };
 
-// TODO this doesn't work if the board is like ["o","o","o","","x","x","","",""]
 Game.validate = (board) => {
   const winPossibilities = [
     [0, 1, 2],
