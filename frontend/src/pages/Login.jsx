@@ -50,7 +50,7 @@ export default function Login() {
 
       <Formik
         initialValues={{
-          email: "",
+          username: "",
           password: "",
         }}
         validationSchema={LoginSchema}
@@ -59,12 +59,17 @@ export default function Login() {
         <Form>
           <fieldset>
             <legend>Login:</legend>
-            <label htmlFor="email">
-              <span>Email</span>
+            <label htmlFor="username">
+              <span>Username</span>
             </label>
-            <Field type="email" name="email" placeholder="Email" autoFocus />
+            <Field
+              type="text"
+              name="username"
+              placeholder="Username"
+              autoFocus
+            />
             <span>
-              <ErrorMessage name="email" />
+              <ErrorMessage name="username" />
             </span>
             <br />
             <label htmlFor="password">

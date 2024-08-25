@@ -1,27 +1,14 @@
 import * as Yup from "yup";
 
-const USER_FIRST_NAME_MAX_LENGTH = 100;
-const USER_LAST_NAME_MAX_LENGTH = 100;
-const USER_EMAIL_MAX_LENGTH = 100;
+const USER_USERNAME_MAX_LENGTH = 100;
 const USER_PASSWORD_MIN_LENGTH = 6;
 const USER_PASSWORD_MAX_LENGTH = 200;
 
 export const RegisterSchema = Yup.object().shape({
-  firstName: Yup.string()
-    .label("First Name")
+  username: Yup.string()
+    .label("Username")
     .min(1)
-    .max(USER_FIRST_NAME_MAX_LENGTH)
-    .required(),
-  lastName: Yup.string()
-    .label("Last Name")
-    .min(1)
-    .max(USER_LAST_NAME_MAX_LENGTH)
-    .required(),
-  email: Yup.string()
-    .label("Email")
-    .min(1)
-    .max(USER_EMAIL_MAX_LENGTH)
-    .email()
+    .max(USER_USERNAME_MAX_LENGTH)
     .required(),
   password: Yup.string()
     .label("Password")
@@ -42,11 +29,10 @@ export const RegisterSchema = Yup.object().shape({
 });
 
 export const LoginSchema = Yup.object().shape({
-  email: Yup.string()
-    .label("Email")
+  username: Yup.string()
+    .label("Username")
     .min(1)
-    .max(USER_EMAIL_MAX_LENGTH)
-    .email()
+    .max(USER_USERNAME_MAX_LENGTH)
     .required(),
   password: Yup.string()
     .label("Password")
@@ -56,21 +42,10 @@ export const LoginSchema = Yup.object().shape({
 });
 
 export const ProfileSchema = Yup.object().shape({
-  firstName: Yup.string()
-    .label("First Name")
+  username: Yup.string()
+    .label("Username")
     .min(1)
-    .max(USER_FIRST_NAME_MAX_LENGTH)
-    .required(),
-  lastName: Yup.string()
-    .label("Last Name")
-    .min(1)
-    .max(USER_LAST_NAME_MAX_LENGTH)
-    .required(),
-  email: Yup.string()
-    .label("Email")
-    .min(1)
-    .max(USER_EMAIL_MAX_LENGTH)
-    .email()
+    .max(USER_USERNAME_MAX_LENGTH)
     .required(),
 });
 

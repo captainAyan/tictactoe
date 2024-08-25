@@ -13,16 +13,14 @@ const {
 const generateToken = require("../util/tokenGenerator");
 
 const login = asyncHandler(async (req, res, next) => {
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ username });
 
   if (user && (await bcrypt.compare(password, user.password))) {
     const response = {
       id: user.id,
-      firstName: user.firstName,
-      lastName: user.lastName,
-      email: user.email,
+      username: user.username,
     };
 
     res.status(StatusCodes.OK).json({
@@ -40,9 +38,9 @@ const register = asyncHandler(async (req, res, next) => {
   if (error) {
     throw new ErrorResponse("Invalid input error", StatusCodes.BAD_REQUEST);
   }
-  const { email, password } = req.body;
+  const { username, password } = req.body;
 
-  const userExists = await User.findOne({ email });
+  const userExists = await User.findOne({ username });
 
   if (userExists) {
     throw new ErrorResponse("User already exists", StatusCodes.BAD_REQUEST);
@@ -62,9 +60,7 @@ const register = asyncHandler(async (req, res, next) => {
 
   const response = {
     id: user.id,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    email: user.email,
+    username: user.username,
   };
 
   res.status(StatusCodes.CREATED).json({
@@ -93,9 +89,7 @@ const getProfile = asyncHandler(async (req, res, next) => {
 
   const response = {
     id: profile.id,
-    firstName: profile.firstName,
-    lastName: profile.lastName,
-    email: profile.email,
+    username: profile.username,
   };
 
   res.status(StatusCodes.OK).json(response);
@@ -107,27 +101,23 @@ const editProfile = asyncHandler(async (req, res, next) => {
   if (error) {
     throw new ErrorResponse("Invalid input error", StatusCodes.BAD_REQUEST);
   }
-  const { firstName, lastName, email } = req.body;
+  const { username } = req.body;
 
   const user = await User.findById(req.user.id).select("-password");
 
-  const userWithEmailExists = await User.findOne({ email });
+  const userWithEmailExists = await User.findOne({ username });
 
-  if (user.email !== email && userWithEmailExists) {
+  if (user.username !== username && userWithEmailExists) {
     throw new ErrorResponse("Email is taken", StatusCodes.BAD_REQUEST);
   }
 
-  user.firstName = firstName;
-  user.lastName = lastName;
-  user.email = email;
+  user.username = username;
 
   await user.save();
 
   const response = {
     id: user.id,
-    firstName: user.firstName,
-    lastName: user.lastName,
-    email: user.email,
+    username: user.username,
   };
 
   res.status(StatusCodes.OK).json(response);
