@@ -6,28 +6,24 @@ class Game {
     this.board = ["", "", "", "", "", "", "", "", ""];
     this.player1HasNextMove = true;
     this.result = Game.Result.PENDING; // o | x | d | p
+    this.rematchGameId = null;
     this.timestamp = Date.now();
   }
 
   addPlayer1(player1) {
-    if (this.player2 && this.player2.id === player1.id) {
+    if (this.player1) throw new Error("Player 1 has already joined the game");
+    if (this.player2 && this.player2.id === player1.id)
       throw new Error("Player 1 and player 2 cannot be the same");
-    } else if (this.player1) {
-      throw new Error("Player 1 has already joined the game");
-    } else {
-      this.player1 = player1;
-    }
+
+    this.player1 = player1;
   }
 
   addPlayer2(player2) {
-    if (this.player1 && this.player1.id === player2.id) {
+    if (this.player2) throw new Error("Player 2 has already joined the game");
+    if (this.player1 && this.player1.id === player2.id)
       throw new Error("Player 1 and player 2 cannot be the same user");
-    } else if (this.player2) {
-      // player2 has already joined the game
-      throw new Error("Player 2 has already joined the game");
-    } else {
-      this.player2 = player2;
-    }
+
+    this.player2 = player2;
   }
 
   addMove(player, position) {
@@ -50,9 +46,8 @@ class Game {
       );
 
     // checking if the move is valid
-    if (position <= 8 && position >= 0 && this.board[position] !== "") {
+    if (position <= 8 && position >= 0 && this.board[position] !== "")
       throw new Error("Invalid move");
-    }
 
     this.board[position] = this.player1HasNextMove
       ? Game.Symbol.NOUGHT

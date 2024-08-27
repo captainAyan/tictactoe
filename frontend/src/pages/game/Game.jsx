@@ -11,10 +11,9 @@ import { GameResult, GameState, NotificationType } from "../../constants/misc";
 export default function Game() {
   const SOCKET_SERVER_URL = `${DOMAIN}/notification`;
   const [socket, setSocket] = useState(null);
-  const { token, user } = useStore((state) => state);
+  const { token } = useStore((state) => state);
 
   const [game, setGame] = useState(null);
-  const [rematchGame, setRematchGame] = useState(null);
 
   const [currentNotification, setCurrentNotification] = useState(null);
   const [currentGameState, setCurrentGameState] = useState(GameState.LOBBY);
@@ -79,44 +78,37 @@ export default function Game() {
       console.log("handling notif");
 
       if (
+        currentNotification.type === NotificationType.PLAYER_JOIN &&
         game &&
-        game.id === currentNotification.payload.id &&
-        currentNotification.type === NotificationType.PLAYER_JOIN
+        (game.id === currentNotification.payload.id ||
+          game.rematchGameId === currentNotification.payload.id)
       ) {
         /// normal joining
         console.log("normal join");
+        console.log("setting game to ", currentNotification.payload);
         setGame(currentNotification.payload);
       } else if (
-        rematchGame &&
-        rematchGame.id === currentNotification.payload.id &&
-        currentNotification.type === NotificationType.PLAYER_JOIN
-      ) {
-        /// joining a rematch
-        console.log("rematch join");
-        // setRematchGame(currentNotification.payload);
-        setGame(currentNotification.payload);
-        setRematchGame(null);
-      } else if (
+        currentNotification.type === NotificationType.MOVE &&
         game &&
-        game.id === currentNotification.payload.id &&
-        currentNotification.type === NotificationType.MOVE
+        game.id === currentNotification.payload.id
       ) {
         /// adding move
         console.log("add move");
         setGame(currentNotification.payload);
       } else if (
+        currentNotification.type === NotificationType.REMATCH_RESPONSE &&
         game &&
-        currentNotification.payload.rematchToGameId === game.id &&
-        currentNotification.type === NotificationType.REMATCH
+        game.id === currentNotification.payload.originalGameId
       ) {
-        /// rematch creation
-        console.log("rematch creation");
-
-        // if client is the creator, then go to the board, otherwise set rematch
-        if (currentNotification.payload.creator._id === user.id) {
-          console.log("YOU CREATED REMATCH");
-          setGame(currentNotification.payload.newGame);
-        } else setRematchGame(currentNotification.payload.newGame);
+        console.log("joining initiated rematch");
+        setGame(currentNotification.payload.newGame);
+      } else if (
+        currentNotification.type === NotificationType.REMATCH_REQUEST &&
+        game &&
+        game.id === currentNotification.payload.id
+      ) {
+        console.log("received request of rematch");
+        setGame(currentNotification.payload);
       }
     }
   }, [currentNotification]);
@@ -127,7 +119,6 @@ export default function Game() {
   useEffect(() => {
     if (game) {
       console.log("updating game state");
-      console.log("game res", game.result);
       if (game.result === GameResult.PENDING) {
         setCurrentGameState(GameState.PLAY);
       } else {
@@ -157,7 +148,7 @@ export default function Game() {
         ) : currentGameState === GameState.PLAY ? (
           <Play game={game} goToLobby={goToLobby} />
         ) : currentGameState === GameState.SCORE ? (
-          <Score game={game} goToLobby={goToLobby} rematchGame={rematchGame} />
+          <Score setGame={setGame} game={game} goToLobby={goToLobby} />
         ) : null}
       </div>
     </>

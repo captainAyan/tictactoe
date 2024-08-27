@@ -68,6 +68,9 @@ const addMove = (req, res, next) => {
   if (!game)
     throw new ErrorResponse("Game doesn't exist", StatusCodes.NOT_FOUND);
 
+  if (game.player1.id !== req.user.id && game.player2.id !== req.user.id)
+    throw new ErrorResponse("User is not a player", StatusCodes.FORBIDDEN);
+
   try {
     game.addMove(req.user, position);
   } catch (error) {
@@ -90,17 +93,30 @@ const createRematchGame = (req, res, next) => {
   const newGame = new Game(uuid());
   addGame(newGame);
 
-  // if rematch initiator is player1, make them player2
-  // else if rematch initiator is player2, make them player1
-  if (game.player1.id === req.user.id) newGame.addPlayer2(req.user);
-  else newGame.addPlayer1(req.user);
+  // assign newGame's id to current game's rematchGameId field
+  game.rematchGameId = newGame.id;
 
+  // if rematch initiator is player1, make them player2
+  if (game.player1.id === req.user.id) {
+    // user is the player1 -> in the new game they become player2
+    newGame.addPlayer2(req.user);
+
+    // notifying the other player (non-initiator of the rematch)
+    userSocketsList.get(game.player2.id).notify("rematch_request", game);
+  }
+  // else if rematch initiator is player2, make them player1
+  else if (game.player2.id === req.user.id) {
+    // user is the player2 -> in the new game they become player1
+    newGame.addPlayer1(req.user);
+
+    // notifying the other player (non-initiator of the rematch)
+    userSocketsList.get(game.player1.id).notify("rematch_request", game);
+  }
+
+  /// sending the newGame to the rematch initiator
   userSocketsList
-    .get(game.player1.id)
-    .notify("rematch", { creator: req.user, rematchToGameId: gameId, newGame });
-  userSocketsList
-    .get(game.player2.id)
-    .notify("rematch", { creator: req.user, rematchToGameId: gameId, newGame });
+    .get(req.user.id)
+    .notify("rematch_response", { originalGameId: game.id, newGame });
 
   res.json(newGame);
 };

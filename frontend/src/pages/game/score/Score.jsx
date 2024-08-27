@@ -6,7 +6,7 @@ import { GameResult } from "../../../constants/misc";
 import { REMATCH_GAME_URL, JOIN_GAME_URL } from "../../../constants/api";
 import authConfig from "../../../util/authConfig";
 
-export default function Score({ game, goToLobby, rematchGame }) {
+export default function Score({ game, goToLobby }) {
   const { user, token } = useStore((store) => store);
 
   const [message, setMessage] = useState("");
@@ -31,7 +31,7 @@ export default function Score({ game, goToLobby, rematchGame }) {
     console.log("joining rematch");
 
     axios
-      .put(JOIN_GAME_URL + rematchGame.id, {}, authConfig(token))
+      .put(JOIN_GAME_URL + game.rematchGameId, {}, authConfig(token))
       .then(({ data }) => {
         console.log(data);
       })
@@ -50,10 +50,9 @@ export default function Score({ game, goToLobby, rematchGame }) {
 
       const gameDraw = game.result === GameResult.DRAW;
 
-      if (!gameDraw) {
-        if (playerWon) setMessage("You Won");
-        else setMessage("You Lose");
-      } else setMessage("Game is draw");
+      if (gameDraw) setMessage("Game is Draw");
+      if (playerWon) setMessage("You Won");
+      else setMessage("You Lose");
     }
   }, [game]);
 
@@ -62,7 +61,7 @@ export default function Score({ game, goToLobby, rematchGame }) {
       <h2>Score</h2>
       <button onClick={goToLobby}>Back to Lobby</button>
 
-      {rematchGame ? (
+      {game.rematchGameId ? (
         <button onClick={joinRematchHandler}>Join Rematch</button>
       ) : (
         <button onClick={rematchRequestHandler}>Rematch Request</button>

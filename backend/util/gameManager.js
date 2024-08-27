@@ -1,4 +1,3 @@
-// const gameList = [];
 const gameList = new Map();
 
 function addGame(game) {
@@ -14,9 +13,8 @@ function getGamesByPlayerId(playerId) {
   const filteredGameList = [];
 
   gameList.forEach((game) => {
-    if (game.player1?.id === playerId || game.player2?.id === playerId) {
+    if (game.player1?.id === playerId || game.player2?.id === playerId)
       filteredGameList.push(game);
-    }
   });
 
   return filteredGameList;

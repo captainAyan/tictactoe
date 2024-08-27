@@ -35,16 +35,15 @@ const login = asyncHandler(async (req, res, next) => {
 const register = asyncHandler(async (req, res, next) => {
   const { error } = createSchema.validate(req.body);
 
-  if (error) {
+  if (error)
     throw new ErrorResponse("Invalid input error", StatusCodes.BAD_REQUEST);
-  }
+
   const { username, password } = req.body;
 
   const userExists = await User.findOne({ username });
 
-  if (userExists) {
+  if (userExists)
     throw new ErrorResponse("User already exists", StatusCodes.BAD_REQUEST);
-  }
 
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, salt);
@@ -54,9 +53,8 @@ const register = asyncHandler(async (req, res, next) => {
     password: hash,
   });
 
-  if (!user) {
+  if (!user)
     throw new ErrorResponse("Invalid input error", StatusCodes.BAD_REQUEST);
-  }
 
   const response = {
     id: user.id,
@@ -83,9 +81,8 @@ const getProfile = asyncHandler(async (req, res, next) => {
     throw new ErrorResponse("User not found", StatusCodes.NOT_FOUND);
   }
 
-  if (!profile) {
+  if (!profile)
     throw new ErrorResponse("User not found", StatusCodes.NOT_FOUND);
-  }
 
   const response = {
     id: profile.id,
@@ -98,18 +95,17 @@ const getProfile = asyncHandler(async (req, res, next) => {
 const editProfile = asyncHandler(async (req, res, next) => {
   const { error } = editSchema.validate(req.body);
 
-  if (error) {
+  if (error)
     throw new ErrorResponse("Invalid input error", StatusCodes.BAD_REQUEST);
-  }
+
   const { username } = req.body;
 
   const user = await User.findById(req.user.id).select("-password");
 
   const userWithEmailExists = await User.findOne({ username });
 
-  if (user.username !== username && userWithEmailExists) {
+  if (user.username !== username && userWithEmailExists)
     throw new ErrorResponse("Email is taken", StatusCodes.BAD_REQUEST);
-  }
 
   user.username = username;
 
@@ -126,9 +122,8 @@ const editProfile = asyncHandler(async (req, res, next) => {
 const changePassword = asyncHandler(async (req, res, next) => {
   const { error } = passwordChangeSchema.validate(req.body);
 
-  if (error) {
+  if (error)
     throw new ErrorResponse("Invalid input error", StatusCodes.BAD_REQUEST);
-  }
 
   const { oldPassword, newPassword } = req.body;
   let user;
@@ -140,9 +135,7 @@ const changePassword = asyncHandler(async (req, res, next) => {
     throw new ErrorResponse("User not found", StatusCodes.NOT_FOUND);
   }
 
-  if (!user) {
-    throw new ErrorResponse("User not found", StatusCodes.NOT_FOUND);
-  }
+  if (!user) throw new ErrorResponse("User not found", StatusCodes.NOT_FOUND);
 
   if (user && (await bcrypt.compare(oldPassword, user.password))) {
     const salt = await bcrypt.genSalt(10);
@@ -155,9 +148,7 @@ const changePassword = asyncHandler(async (req, res, next) => {
     const response = { message: "success" };
 
     res.status(StatusCodes.OK).json(response);
-  } else {
-    throw new ErrorResponse("Invalid password", StatusCodes.BAD_REQUEST);
-  }
+  } else throw new ErrorResponse("Invalid password", StatusCodes.BAD_REQUEST);
 });
 
 const deleteProfile = asyncHandler(async (req, res, next) => {
