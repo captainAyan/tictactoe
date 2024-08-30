@@ -51,25 +51,36 @@ export default function Score({ game, goToLobby }) {
       const gameDraw = game.result === GameResult.DRAW;
 
       if (gameDraw) setMessage("Game is Draw");
-      if (playerWon) setMessage("You Won");
-      else setMessage("You Lose");
+      if (playerWon) setMessage("You Won 🎉");
+      else setMessage("You Lose 😥");
     }
   }, [game]);
 
   return (
-    <div>
-      <h2>Score</h2>
-      <button onClick={goToLobby}>Back to Lobby</button>
+    <>
+      <h1 className="result">{message}</h1>
 
       {game.rematchGameId ? (
-        <button onClick={joinRematchHandler}>Join Rematch</button>
+        <button
+          onClick={joinRematchHandler}
+          disabled={isLoading}
+          className="btn primary-btn large-btn"
+        >
+          Join Rematch
+        </button>
       ) : (
-        <button onClick={rematchRequestHandler}>Rematch Request</button>
+        <button
+          onClick={rematchRequestHandler}
+          disabled={isLoading}
+          className="btn primary-btn large-btn"
+        >
+          Rematch Request
+        </button>
       )}
 
-      {isLoading ? "Sending move" : ""}
-      <hr />
-      {message}
-    </div>
+      <button className="btn accent-btn large-btn" onClick={goToLobby}>
+        Back to Lobby
+      </button>
+    </>
   );
 }

@@ -35,14 +35,12 @@ const Lobby = ({ setGame }) => {
   };
 
   return (
-    <div>
-      <h1>Lobby</h1>
-      <hr />
+    <>
       <JoinGame setGame={setGame} />
+      <hr />
       <CreateGame setGame={setGame} />
 
-      <hr />
-      {isLoading ? "Loading Your Game List" : ""}
+      {/* {isLoading ? "Loading Your Game List" : ""}
       <>
         {games.map((game) => {
           return (
@@ -54,8 +52,8 @@ const Lobby = ({ setGame }) => {
             </p>
           );
         })}
-      </>
-    </div>
+      </> */}
+    </>
   );
 };
 

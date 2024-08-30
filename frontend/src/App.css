@@ -1,12 +1,183 @@
+:root {
+  --primary: #8692f7;
+  --primary-dark: #7b85e2;
+  --accent: white;
+  --accent-dark: rgb(240, 240, 240);
+  --warning: #F78688;
+  --wait: #ff9090;
+  --play: #16ff76;
+  --input-background: #f2f2f2;
+  --separator: rgb(235, 235, 235);
+}
+
 * {
-  background-color: black;
-  color:white;
-  border-color: white;
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 0;
+}
+hr {
+  border: 0;
+  height: 4px;
+  background-color: var(--separator)
+}
+
+a {
+  text-decoration: underline;
+}
+a.primary-link {
+  color: var(--accent);
+}
+a.accent-link {
+  color: var(--primary);
+}
+
+.container {
+  background-color: var(--primary);
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.wrapper {
+  max-width: 420px;
+  width: 100%;
+}
+
+.section {
+  border-radius: 32px;
+  background-color: white;
+  padding: 64px 40px 44px 40px;
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0px 0px 20px 0px
+}
+.header > h2 {
+  margin: 0px;
+}
+
+button, input {
+  border: none;
+  border-radius: 4px;
+  margin: 4px 0;
+  display: inline-block;
+  font-size: 16px;
+  line-height: 20px;
+  text-decoration: none;
+}
+input {
+  padding: 12px;
+  width: 100%;
+  background-color: var(--input-background);
+}
+input:focus {
+  outline: solid 4px var(--primary);
+}
+.btn {
+  font-weight: bold;
+  padding: 12px 36px;
+  cursor: pointer;
+}
+.btn:disabled {
+  cursor: no-drop;
+  opacity: 0.6;
+}
+.large-btn {
+  width: 100%;
+}
+.small-btn {
+  padding:8px 28px;
+}
+.primary-btn {
+  background-color: var(--primary);
+  color: white;
+}
+.primary-btn:hover {
+  background-color: var(--primary-dark);
+}
+.accent-btn {
+  background-color: white;
+  color: var(--primary);
+}
+.accent-btn:hover {
+  background-color: var(--accent-dark);
+}
+
+h1 {
+  margin: 0px 0px 28px 0px;
+  font-size: 36px;
+}
+
+label {
+  margin: auto 2px;
+  font-size: 14px;
+}
+
+fieldset {
+  border: none;
+  padding: 0px;
+  margin: 0px;
+}
+
+.form-field {
+  margin-bottom: 24px;
+}
+.warning {
+  color: var(--warning);
+  font-size: 14px;
+  margin: 10px 2px;
+}
+.register-link {
+  color: white;
+  text-align: center;
+}
+p.game-status {
+  padding: 8px 20px;
+  margin: 8px 0px;
+  font-size: 12px;
+  display: inline-block;
+  border-radius: 8px;
+  color: white;
+}
+p.game-status.wait {
+  background-color: var(--wait);
+}
+p.game-status.play {
+  background-color: var(--play);
+}
+h1.result {
+  margin: 36px;
+  text-align: center;
+}
+
+.board-btn-container {
+  width: 100%;
+  aspect-ratio: 1/1;
+}
+
+.board-btn-wrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  gap: 10px;
+  width: 100%;
+  height: 100%;
 }
 
 .board-btn {
-  width: 30px;
-  height: 30px;
-  text-align: center;
-  line-height: normal;
+  border: none;
+  border-radius: 8px;
+  font-size: 52px;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

@@ -3,11 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import { Formik, Form, ErrorMessage, Field } from "formik";
 
 import axios from "axios";
-import { LOGIN_URL } from "../constants/api";
-import { LoginSchema } from "../util/userValidationSchema";
+import { REGISTER_URL } from "../constants/api";
+import { RegisterSchema } from "../util/userValidationSchema";
 import useStore from "../store";
 
-export default function Login() {
+export default function Register() {
   const navigate = useNavigate();
 
   const [isLoading, setIsLoading] = useState(false);
@@ -27,12 +27,12 @@ export default function Login() {
     if (token && user) {
       navigate("/");
     }
-  }, [user, token, responseData, navigate, login]);
+  }, [user, token, error, responseData, navigate, login]);
 
   const handleSubmit = (userData) => {
     setIsLoading(true);
     axios
-      .post(LOGIN_URL, userData)
+      .post(REGISTER_URL, userData)
       .then(({ data }) => setResponseData(data))
       .catch((error) => setError(error.response.data.error.message))
       .finally(() => setIsLoading(false));
@@ -45,15 +45,15 @@ export default function Login() {
           initialValues={{
             username: "",
             password: "",
+            confirmPassword: "",
           }}
-          validationSchema={LoginSchema}
+          validationSchema={RegisterSchema}
           onSubmit={async (values) => handleSubmit(values)}
         >
           <Form>
             <fieldset>
-              {/* <legend className="large">Login</legend> */}
               <legend>
-                <h1>Login</h1>
+                <h1>Register</h1>
               </legend>
 
               <div className="form-field">
@@ -81,6 +81,20 @@ export default function Login() {
                 </span>
               </div>
 
+              <div className="form-field">
+                <label htmlFor="confirmPassword">
+                  <span>Confirm Password</span>
+                </label>
+                <Field
+                  type="password"
+                  name="confirmPassword"
+                  placeholder="Confirm Password"
+                />
+                <span className="warning">
+                  <ErrorMessage name="confirmPassword" />
+                </span>
+              </div>
+
               <p className="warning">{error}</p>
 
               <button
@@ -89,16 +103,16 @@ export default function Login() {
                 } btn large-btn primary-btn`}
                 type="submit"
               >
-                Login
+                Register
               </button>
             </fieldset>
           </Form>
         </Formik>
       </div>
       <p className="register-link">
-        Don&apos;t have an Account?&nbsp;
-        <Link to="/register" className="primary-link">
-          Sign Up
+        Already have an Account?&nbsp;
+        <Link to="/login" className="primary-link">
+          Log In
         </Link>
       </p>
     </>

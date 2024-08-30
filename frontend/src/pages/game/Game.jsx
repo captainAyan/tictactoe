@@ -11,12 +11,17 @@ import { GameResult, GameState, NotificationType } from "../../constants/misc";
 export default function Game() {
   const SOCKET_SERVER_URL = `${DOMAIN}/notification`;
   const [socket, setSocket] = useState(null);
-  const { token } = useStore((state) => state);
+  const { token, logout } = useStore((state) => state);
 
   const [game, setGame] = useState(null);
 
   const [currentNotification, setCurrentNotification] = useState(null);
   const [currentGameState, setCurrentGameState] = useState(GameState.LOBBY);
+
+  const handleLogout = () => {
+    localStorage.setItem("token", "");
+    logout();
+  };
 
   useEffect(() => {
     // Connect to the Socket.IO server
@@ -140,8 +145,22 @@ export default function Game() {
   const goToLobby = () => setCurrentGameState(GameState.LOBBY);
 
   return (
-    <>
-      <p>{JSON.stringify(game)}</p>
+    <div className="section">
+      <div className="header">
+        <h2>
+          {currentGameState === GameState.LOBBY
+            ? "Lobby"
+            : currentGameState === GameState.PLAY
+            ? "Play"
+            : currentGameState === GameState.SCORE
+            ? "Score"
+            : null}
+        </h2>
+        <button className="btn primary-btn small-btn" onClick={handleLogout}>
+          Logout
+        </button>
+      </div>
+      <hr />
       <div>
         {currentGameState === GameState.LOBBY ? (
           <Lobby setGame={setGame} />
@@ -151,6 +170,6 @@ export default function Game() {
           <Score setGame={setGame} game={game} goToLobby={goToLobby} />
         ) : null}
       </div>
-    </>
+    </div>
   );
 }

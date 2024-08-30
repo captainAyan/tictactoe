@@ -8,7 +8,7 @@ import { GameIdSchema } from "../../../util/gameIdValidationSchema";
 import useStore from "../../../store";
 
 export default function JoinGame({ setGame }) {
-  const [error, setError] = useState({});
+  const [error, setError] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
   const { token } = useStore((state) => state);
@@ -20,14 +20,12 @@ export default function JoinGame({ setGame }) {
     axios
       .put(JOIN_GAME_URL + gameId, {}, authConfig(token))
       .then(({ data }) => setGame(data))
-      .catch((error) => setError(error.response))
+      .catch((error) => setError(error.response.data.error.message))
       .finally(() => setIsLoading(false));
   };
 
   return (
     <div>
-      <h2>Join game form</h2>
-
       <Formik
         initialValues={{
           gameId: "",
@@ -37,22 +35,35 @@ export default function JoinGame({ setGame }) {
       >
         <Form>
           <fieldset>
-            <legend>Join game:</legend>
-            <label htmlFor="gameId">
-              <span>Game Id</span>
-            </label>
-            <Field type="text" name="gameId" placeholder="Game Id" autoFocus />
-            <span>
-              <ErrorMessage name="gameId" />
-            </span>
-            <button className={`${isLoading ? "loading" : ""}`} type="submit">
+            <legend>
+              <h1>Join game</h1>
+            </legend>
+            <div className="form-field">
+              <label htmlFor="gameId">
+                <span>Game Id</span>
+              </label>
+              <Field
+                type="text"
+                name="gameId"
+                placeholder="Game Id"
+                autoFocus
+              />
+              <span className="warning">
+                <ErrorMessage name="gameId" />
+              </span>
+            </div>
+
+            <p className="warning">{error}</p>
+            <button
+              className="btn large-btn primary-btn"
+              type="submit"
+              disabled={isLoading}
+            >
               Join
             </button>
           </fieldset>
         </Form>
       </Formik>
-
-      <p>Error: {JSON.stringify(error)}</p>
     </div>
   );
 }

@@ -4,6 +4,7 @@ import axios from "axios";
 
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
+import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Game from "./pages/game/Game";
 
@@ -35,22 +36,24 @@ export default function App() {
   }, [token, login, logout]);
 
   return (
-    <BrowserRouter>
-      <nav>
-        {token ? <button onClick={handleLogout}>Logout</button> : <></>}
-      </nav>
-      <Routes>
-        <Route path="/" element={<Navigate to="/game" replace />} />
-        <Route
-          path="/game"
-          element={
-            <AuthProtectedRoute>
-              <Game />
-            </AuthProtectedRoute>
-          }
-        />
-        <Route path="login" element={<Login />} />
-      </Routes>
-    </BrowserRouter>
+    <div className="container">
+      <div className="wrapper">
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Navigate to="/game" replace />} />
+            <Route
+              path="/game"
+              element={
+                <AuthProtectedRoute>
+                  <Game />
+                </AuthProtectedRoute>
+              }
+            />
+            <Route path="login" element={<Login />} />
+            <Route path="register" element={<Register />} />
+          </Routes>
+        </BrowserRouter>
+      </div>
+    </div>
   );
 }

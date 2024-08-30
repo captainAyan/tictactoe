@@ -35,15 +35,32 @@ export default function Play({ game, goToLobby }) {
     }
   }, [game]);
 
+  const [isCopied, setIsCopied] = useState(false);
+  const copyGameId = () => {
+    navigator.clipboard.writeText(game.id).then(() => setIsCopied(true));
+  };
+
   return (
-    <div>
-      <h2>Play</h2>
-      <p>{isPlaying ? "Play" : "Wait"}</p>
-      <button onClick={goToLobby}>Back to Lobby</button>
+    <>
+      <p style={{ fontFamily: "monospace", fontSize: "16px" }}>{game.id}</p>
+
+      <button
+        className="btn primary-btn small-btn"
+        style={{ marginRight: "8px" }}
+        onClick={copyGameId}
+      >
+        {isCopied ? "Copied" : "Copy ID"}
+      </button>
+      <button className="btn accent-btn small-btn" onClick={goToLobby}>
+        Back To Lobby
+      </button>
+      <p className={`game-status ${isPlaying ? "play" : "wait"}`}>
+        {isPlaying ? "🚀 Play" : "⏳ Wait"}
+      </p>
       {isLoading ? "Sending move" : ""}
       <hr />
       <Board board={game.board} buttonHandler={boardButtonHandler} />
       <br />
-    </div>
+    </>
   );
 }
