@@ -42,12 +42,7 @@ export default function JoinGame({ setGame }) {
               <label htmlFor="gameId">
                 <span>Game Id</span>
               </label>
-              <Field
-                type="text"
-                name="gameId"
-                placeholder="Game Id"
-                autoFocus
-              />
+              <Field type="text" name="gameId" placeholder="Game Id" />
               <span className="warning">
                 <ErrorMessage name="gameId" />
               </span>
