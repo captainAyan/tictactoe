@@ -181,3 +181,27 @@ h1.result {
   justify-content: center;
   align-items: center;
 }
+
+.match-up {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 8px;
+  padding: 8px 0px;
+}
+
+.match-up > .player-name {
+  margin: 0px ;
+  font-size: 18px;
+  max-width: 150px; /* Adjust as needed */
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  font-weight: bold;
+}
+.match-up > .vs {
+  margin: 0px 8px;
+}
+.match-up > .btn-container {
+  margin-left: auto;
+}

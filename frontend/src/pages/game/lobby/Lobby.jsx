@@ -39,20 +39,43 @@ const Lobby = ({ setGame }) => {
       <JoinGame setGame={setGame} />
       <hr />
       <CreateGame setGame={setGame} />
+      <hr />
+      <div>
+        {games?.length !== 0 ? <h2>Games</h2> : null}
+        {isLoading ? "Loading Your Game List" : ""}
+        <>
+          {games.map((game) => {
+            return (
+              <div className="match-up" key={game.id}>
+                <span
+                  title={game.player1?.username}
+                  className="player-name"
+                  id="player1"
+                >
+                  {game.player1?.username || "..."}
+                </span>
+                <span className="vs">vs</span>
+                <span
+                  title={game.player2?.username}
+                  className="player-name"
+                  id="player1"
+                >
+                  {game.player2?.username || "..."}
+                </span>
 
-      {/* {isLoading ? "Loading Your Game List" : ""}
-      <>
-        {games.map((game) => {
-          return (
-            <p key={game.id}>
-              <span>{game.id} = </span>
-              <a href="#" onClick={() => fetchAndSetGame(game.id)}>
-                Join
-              </a>
-            </p>
-          );
-        })}
-      </> */}
+                <div className="btn-container">
+                  <button
+                    onClick={() => fetchAndSetGame(game.id)}
+                    className="btn accent-btn small-btn"
+                  >
+                    Re-enter
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </>
+      </div>
     </>
   );
 };
