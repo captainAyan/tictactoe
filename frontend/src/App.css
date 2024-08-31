@@ -2,12 +2,20 @@
   --primary: #8692f7;
   --primary-dark: #7b85e2;
   --accent: white;
-  --accent-dark: rgb(240, 240, 240);
+  --accent-dark: #f0f0f0;
   --warning: #F78688;
-  --wait: #ff9090;
-  --play: #16ff76;
   --input-background: #f2f2f2;
-  --separator: rgb(235, 235, 235);
+  --separator: #ebebeb;
+
+
+  /* --wait: #ff9090;
+  --play: #16ff76;
+  --your-turn: #16ff76;
+  --not-your-turn: #F4B400; */
+  --wait: #f7a4a4;
+  --play: #b4c9a7;
+  --your-turn: #b4c9a7;
+  --not-your-turn: #f4b400;
 }
 
 * {
@@ -139,7 +147,7 @@ fieldset {
   color: white;
   text-align: center;
 }
-p.game-status {
+span.game-status {
   padding: 8px 20px;
   margin: 8px 0px;
   font-size: 12px;
@@ -147,11 +155,17 @@ p.game-status {
   border-radius: 8px;
   color: white;
 }
-p.game-status.wait {
+span.game-status.wait {
   background-color: var(--wait);
 }
-p.game-status.play {
+span.game-status.play {
   background-color: var(--play);
+}
+span.game-status.your-turn {
+  background-color: var(--your-turn);
+}
+span.game-status.not-your-turn {
+  background-color: var(--not-your-turn);
 }
 h1.result {
   margin: 36px;

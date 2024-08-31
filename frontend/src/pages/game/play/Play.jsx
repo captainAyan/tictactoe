@@ -7,12 +7,14 @@ import useStore from "../../../store";
 import Board from "./Board";
 
 export default function Play({ game, goToLobby }) {
-  const { token } = useStore((state) => state);
+  const { token, user } = useStore((state) => state);
 
   // if player2 is null, then the state is waiting
   const [isPlaying, setIsPlaying] = useState(game.player1 && game.player2);
 
   const [isLoading, setIsLoading] = useState(false);
+
+  const [isYourTurn, setIsYourTurn] = useState(false);
 
   const boardButtonHandler = (position) => {
     if (isPlaying) {
@@ -30,6 +32,13 @@ export default function Play({ game, goToLobby }) {
   };
 
   useEffect(() => {
+    if (game.player1 && game.player2) {
+      setIsYourTurn(
+        (user.id === game.player1._id && game.player1HasNextMove) ||
+          (user.id === game.player2._id && !game.player1HasNextMove)
+      );
+    }
+
     if (!isPlaying && game.player1 && game.player2) {
       setIsPlaying(true);
     }
@@ -54,10 +63,28 @@ export default function Play({ game, goToLobby }) {
       <button className="btn accent-btn small-btn" onClick={goToLobby}>
         Back To Lobby
       </button>
-      <p className={`game-status ${isPlaying ? "play" : "wait"}`}>
+      <span
+        style={{ marginRight: "8px" }}
+        className={`game-status ${isPlaying ? "play" : "wait"}`}
+        title={isPlaying ? "Opponent has joined" : "Wait for opponent to join"}
+      >
         {isPlaying ? "🚀 Play" : "⏳ Wait"}
-      </p>
-      {isLoading ? "Sending move" : ""}
+      </span>
+
+      {isPlaying ? (
+        <span
+          style={{ marginRight: "8px" }}
+          className={`game-status ${
+            isYourTurn ? "your-turn" : "not-your-turn"
+          }`}
+          title={isYourTurn ? "Your turn to play" : "Not Your turn to play"}
+        >
+          {isYourTurn ? "🟢 Your Turn" : "🛑 Not Your Turn"}
+        </span>
+      ) : null}
+
+      <span>{isLoading ? "Loading..." : ""}</span>
+
       <hr />
       <Board board={game.board} buttonHandler={boardButtonHandler} />
       <br />
