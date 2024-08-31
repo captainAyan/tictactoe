@@ -51,7 +51,7 @@ export default function Score({ game, goToLobby }) {
       const gameDraw = game.result === GameResult.DRAW;
 
       if (gameDraw) setMessage("Game is Draw");
-      if (playerWon) setMessage("You Won 🎉");
+      else if (playerWon) setMessage("You Won 🎉");
       else setMessage("You Lose 😥");
     }
   }, [game]);
