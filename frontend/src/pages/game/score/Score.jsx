@@ -5,6 +5,7 @@ import useStore from "../../../store";
 import { GameResult } from "../../../constants/misc";
 import { REMATCH_GAME_URL, JOIN_GAME_URL } from "../../../constants/api";
 import authConfig from "../../../util/authConfig";
+import ScoreBoard from "../../../components/ScoreBoard";
 
 export default function Score({ game, goToLobby }) {
   const { user, token } = useStore((store) => store);
@@ -58,6 +59,13 @@ export default function Score({ game, goToLobby }) {
 
   return (
     <>
+      <ScoreBoard
+        player1Name={game.player1?.username}
+        player1Score={10}
+        player2Name={game.player2?.username}
+        player2Score={11}
+      />
+
       <h1 className="result">{message}</h1>
 
       {game.rematchGameId ? (

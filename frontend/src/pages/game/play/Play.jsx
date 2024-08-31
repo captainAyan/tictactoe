@@ -5,6 +5,7 @@ import { ADD_MOVE_GAME_URL } from "../../../constants/api";
 import authConfig from "../../../util/authConfig";
 import useStore from "../../../store";
 import Board from "./Board";
+import ScoreBoard from "../../../components/ScoreBoard";
 
 export default function Play({ game, goToLobby }) {
   const { token, user } = useStore((state) => state);
@@ -51,21 +52,12 @@ export default function Play({ game, goToLobby }) {
 
   return (
     <>
-      <div className="scoreboard">
-        <div className="player">
-          <p className="player-name" title={`${game.player1?.username} (O)`}>
-            {game.player1?.username || "..."}
-          </p>
-          <p className="player-score">120</p>
-        </div>
-        <span className="vs">vs</span>
-        <div className="player">
-          <p className="player-name" title={`${game.player2?.username} (X)`}>
-            {game.player2?.username || "..."}
-          </p>
-          <p className="player-score">95</p>
-        </div>
-      </div>
+      <ScoreBoard
+        player1Name={game.player1?.username}
+        player1Score={10}
+        player2Name={game.player2?.username}
+        player2Score={11}
+      />
 
       <p style={{ fontFamily: "monospace", fontSize: "16px" }}>
         <b>Game ID: </b>
