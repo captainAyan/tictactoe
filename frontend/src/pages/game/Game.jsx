@@ -27,6 +27,7 @@ export default function Game() {
     // Connect to the Socket.IO server
     const newSocket = io(SOCKET_SERVER_URL, {
       auth: { token: "Bearer " + token },
+      transports: ["websocket"],
     });
 
     setSocket(newSocket);
@@ -52,6 +53,7 @@ export default function Game() {
       // Handle connection error event
       socket.on("connect_error", (err) => {
         console.log("Connection error:", err.message);
+        window.alert(`WebSocket Error: ${err.message}`);
       });
 
       socket.on("notification", notificationHandler);
