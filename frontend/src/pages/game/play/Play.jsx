@@ -51,7 +51,26 @@ export default function Play({ game, goToLobby }) {
 
   return (
     <>
-      <p style={{ fontFamily: "monospace", fontSize: "16px" }}>{game.id}</p>
+      <div className="scoreboard">
+        <div className="player">
+          <p className="player-name" title={`${game.player1?.username} (O)`}>
+            {game.player1?.username || "..."}
+          </p>
+          <p className="player-score">120</p>
+        </div>
+        <span className="vs">vs</span>
+        <div className="player">
+          <p className="player-name" title={`${game.player2?.username} (X)`}>
+            {game.player2?.username || "..."}
+          </p>
+          <p className="player-score">95</p>
+        </div>
+      </div>
+
+      <p style={{ fontFamily: "monospace", fontSize: "16px" }}>
+        <b>Game ID: </b>
+        <span>{game.id}</span>
+      </p>
 
       <button
         className="btn primary-btn small-btn"

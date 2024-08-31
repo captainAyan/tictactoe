@@ -219,3 +219,39 @@ h1.result {
 .match-up > .btn-container {
   margin-left: auto;
 }
+
+.scoreboard {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 28px 20px 20px 20px;
+  width: 100%;
+  margin: auto;
+  position: relative;
+  background-color: var(--primary);
+  border-radius: 16px;
+  color: white;
+}
+.scoreboard > .player {
+  text-align: center;
+  width: 40%;
+}
+.scoreboard > .player > .player-name {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.scoreboard > .player > .player-score {
+  font-size: 36px;
+  font-weight: bold;
+  margin: 0;
+}
+.scoreboard > .vs {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 20px;
+}
