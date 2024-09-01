@@ -6,7 +6,11 @@ class Game {
     this.board = ["", "", "", "", "", "", "", "", ""];
     this.player1HasNextMove = true;
     this.result = Game.Result.PENDING; // o | x | d | p
-    this.rematchGameId = null;
+    this.rematch = {
+      originalGameId: null, /// for rematch response
+      gameId: null, /// this is for the rematch request
+      requesteeId: null, /// this won't be null in a new game
+    };
     this.timestamp = Date.now();
   }
 

@@ -46,6 +46,15 @@ const joinGame = (req, res, next) => {
   if (!game)
     throw new ErrorResponse("Game doesn't exist", StatusCodes.NOT_FOUND);
 
+  // if the game is a rematch, and the user is not the requestee
+  console.log(game.rematch.requesteeId, req.user.id);
+  if (game.rematch.requesteeId && req.user.id !== game.rematch.requesteeId) {
+    throw new ErrorResponse(
+      "Not allowed to join this game",
+      StatusCodes.FORBIDDEN
+    );
+  }
+
   try {
     // if player1 is not null, then try adding user as player2
     if (game.player1) game.addPlayer2(req.user);
@@ -93,13 +102,19 @@ const createRematchGame = (req, res, next) => {
   const newGame = new Game(uuid());
   addGame(newGame);
 
-  // assign newGame's id to current game's rematchGameId field
-  game.rematchGameId = newGame.id;
+  // assigning current game's id ot newGame's originalGameId of rematch
+  newGame.rematch.originalGameId = game.id;
+
+  // assigning newGame's id to current game's rematchGameId field
+  game.rematch.gameId = newGame.id;
 
   // if rematch initiator is player1, make them player2
   if (game.player1.id === req.user.id) {
     // user is the player1 -> in the new game they become player2
     newGame.addPlayer2(req.user);
+
+    // adding requesteeId (non-initiator user) to rematch
+    newGame.rematch.requesteeId = game.player2.id;
 
     // notifying the other player (non-initiator of the rematch)
     userSocketsList.get(game.player2.id).notify("rematch_request", game);
@@ -109,14 +124,15 @@ const createRematchGame = (req, res, next) => {
     // user is the player2 -> in the new game they become player1
     newGame.addPlayer1(req.user);
 
+    // adding requesteeId (non-initiator user) to rematch
+    game.rematch.requesteeId = game.player1.id;
+
     // notifying the other player (non-initiator of the rematch)
     userSocketsList.get(game.player1.id).notify("rematch_request", game);
   }
 
   /// sending the newGame to the rematch initiator
-  userSocketsList
-    .get(req.user.id)
-    .notify("rematch_response", { originalGameId: game.id, newGame });
+  userSocketsList.get(req.user.id).notify("rematch_response", newGame);
 
   res.json(newGame);
 };

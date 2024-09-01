@@ -88,7 +88,7 @@ export default function Game() {
         currentNotification.type === NotificationType.PLAYER_JOIN &&
         game &&
         (game.id === currentNotification.payload.id ||
-          game.rematchGameId === currentNotification.payload.id)
+          game.rematch.gameId === currentNotification.payload.id)
       ) {
         /// normal joining
         console.log("normal join");
@@ -105,10 +105,10 @@ export default function Game() {
       } else if (
         currentNotification.type === NotificationType.REMATCH_RESPONSE &&
         game &&
-        game.id === currentNotification.payload.originalGameId
+        game.id === currentNotification.payload.rematch.originalGameId
       ) {
         console.log("joining initiated rematch");
-        setGame(currentNotification.payload.newGame);
+        setGame(currentNotification.payload);
       } else if (
         currentNotification.type === NotificationType.REMATCH_REQUEST &&
         game &&
