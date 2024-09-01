@@ -32,7 +32,7 @@ export default function Score({ game, goToLobby }) {
     console.log("joining rematch");
 
     axios
-      .put(JOIN_GAME_URL + game.rematch.gameId, {}, authConfig(token))
+      .put(JOIN_GAME_URL + game.rematch.newGameId, {}, authConfig(token))
       .then(({ data }) => {
         console.log(data);
       })
@@ -69,7 +69,7 @@ export default function Score({ game, goToLobby }) {
 
       <h1 className="result">{message}</h1>
 
-      {game.rematch.gameId ? (
+      {game.rematch.newGameId ? (
         <button
           onClick={joinRematchHandler}
           disabled={isLoading}

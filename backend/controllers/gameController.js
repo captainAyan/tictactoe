@@ -47,7 +47,6 @@ const joinGame = (req, res, next) => {
     throw new ErrorResponse("Game doesn't exist", StatusCodes.NOT_FOUND);
 
   // if the game is a rematch, and the user is not the requestee
-  console.log(game.rematch.requesteeId, req.user.id);
   if (game.rematch.requesteeId && req.user.id !== game.rematch.requesteeId) {
     throw new ErrorResponse(
       "Not allowed to join this game",
@@ -106,7 +105,7 @@ const createRematchGame = (req, res, next) => {
   newGame.rematch.originalGameId = game.id;
 
   // assigning newGame's id to current game's rematchGameId field
-  game.rematch.gameId = newGame.id;
+  game.rematch.newGameId = newGame.id;
 
   // if rematch initiator is player1, make them player2
   if (game.player1.id === req.user.id) {
@@ -125,7 +124,7 @@ const createRematchGame = (req, res, next) => {
     newGame.addPlayer1(req.user);
 
     // adding requesteeId (non-initiator user) to rematch
-    game.rematch.requesteeId = game.player1.id;
+    newGame.rematch.requesteeId = game.player1.id;
 
     // notifying the other player (non-initiator of the rematch)
     userSocketsList.get(game.player1.id).notify("rematch_request", game);

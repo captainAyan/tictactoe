@@ -7,9 +7,12 @@ class Game {
     this.player1HasNextMove = true;
     this.result = Game.Result.PENDING; // o | x | d | p
     this.rematch = {
-      originalGameId: null, /// for rematch response
-      gameId: null, /// this is for the rematch request
-      requesteeId: null, /// this won't be null in a new game
+      /// for rematch response (id of the current game)
+      originalGameId: null,
+      /// this is for the rematch request (id of the rematch game)
+      newGameId: null,
+      /// this won't be null in a new game (id of non-initiator user)
+      requesteeId: null,
     };
     this.timestamp = Date.now();
   }

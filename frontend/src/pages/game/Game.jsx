@@ -88,7 +88,7 @@ export default function Game() {
         currentNotification.type === NotificationType.PLAYER_JOIN &&
         game &&
         (game.id === currentNotification.payload.id ||
-          game.rematch.gameId === currentNotification.payload.id)
+          game.rematch.newGameId === currentNotification.payload.id)
       ) {
         /// normal joining
         console.log("normal join");
