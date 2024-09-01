@@ -64,6 +64,7 @@ export default function Score({ game, goToLobby }) {
         player1Score={10}
         player2Name={game.player2?.username}
         player2Score={11}
+        userIsPlayer1={game.player1?._id === user.id}
       />
 
       <h1 className="result">{message}</h1>

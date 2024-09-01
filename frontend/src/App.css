@@ -224,7 +224,7 @@ h1.result {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 28px 20px 20px 20px;
+  padding: 20px 20px 16px 20px;
   width: 100%;
   margin: auto;
   position: relative;
@@ -235,6 +235,11 @@ h1.result {
 .scoreboard > .player {
   text-align: center;
   width: 40%;
+  padding: 8px 8px 2px 8px;
+}
+.scoreboard > .player.user {
+  border-radius: 12px;
+  background-color: var(--primary-dark);
 }
 .scoreboard > .player > .player-name {
   font-size: 18px;
