@@ -14,6 +14,12 @@ class Game {
       /// this won't be null in a new game (id of non-initiator user)
       requesteeId: null,
     };
+    this.sessionData = {
+      // The index of the current game in the session, starting from 0 index of the game
+      gameIndex: 0,
+
+      score: {}, // { { <playerId:objectId>: <scorevalue:int>}, ... }
+    };
     this.timestamp = Date.now();
   }
 
@@ -63,6 +69,21 @@ class Game {
 
     const result = Game.validate(this.board);
     if (result) this.result = result;
+
+    // session score update
+    if (this.result !== Game.Result.PENDING) {
+      if (this.result === Game.Result.NOUGHT_WON) {
+        // nought has won, that means player1 has won
+        const currentScore = this.sessionData.score[this.player1.id];
+        this.sessionData.score[this.player1.id] = currentScore + 1;
+      } else if (this.result === Game.Result.CROSS_WON) {
+        // cross has won, that means player2 has won
+        const currentScore = this.sessionData.score[this.player2.id];
+        this.sessionData.score[this.player2.id] = currentScore + 1;
+      }
+
+      /// otherwise, the game ended in DRAW, and no point needs to be added
+    }
   }
 }
 

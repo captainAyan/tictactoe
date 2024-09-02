@@ -32,6 +32,7 @@ const getGame = (req, res, next) => {
 const createGame = (req, res, next) => {
   const game = new Game(uuid());
   game.addPlayer1(req.user);
+  game.sessionData.score[req.user.id] = 0;
 
   addGame(game);
 
@@ -61,6 +62,11 @@ const joinGame = (req, res, next) => {
   } catch (error) {
     throw new ErrorResponse(error.message, StatusCodes.BAD_REQUEST);
   }
+
+  // adding user.id to sessionData.points Map
+  // (ONLY works when joining new game NOT REMATCH
+  if (!game.sessionData.score[req.user.id])
+    game.sessionData.score[req.user.id] = 0;
 
   userSocketsList.get(game.player1.id).notify("player_join", game);
   userSocketsList.get(game.player2.id).notify("player_join", game);
@@ -100,6 +106,8 @@ const createRematchGame = (req, res, next) => {
 
   const newGame = new Game(uuid());
   addGame(newGame);
+  newGame.sessionData = game.sessionData;
+  newGame.sessionData.gameIndex += 1;
 
   // assigning current game's id ot newGame's originalGameId of rematch
   newGame.rematch.originalGameId = game.id;

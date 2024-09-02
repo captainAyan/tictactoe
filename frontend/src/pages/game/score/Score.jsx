@@ -61,9 +61,9 @@ export default function Score({ game, goToLobby }) {
     <>
       <ScoreBoard
         player1Name={game.player1?.username}
-        player1Score={10}
+        player1Score={game.sessionData?.score[game.player1?._id] || "-"}
         player2Name={game.player2?.username}
-        player2Score={11}
+        player2Score={game.sessionData?.score[game.player2?._id] || "-"}
         userIsPlayer1={game.player1?._id === user.id}
       />
 
