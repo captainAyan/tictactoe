@@ -36,7 +36,7 @@ export default function JoinGame({ setGame }) {
         <Form>
           <fieldset>
             <legend>
-              <h1>Join game</h1>
+              <h2>Join Game</h2>
             </legend>
             <div className="form-field">
               <label htmlFor="gameId">

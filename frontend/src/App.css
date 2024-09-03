@@ -167,7 +167,7 @@ span.game-status.your-turn {
 span.game-status.not-your-turn {
   background-color: var(--not-your-turn);
 }
-h1.result {
+h1.result-message {
   margin: 36px;
   text-align: center;
 }

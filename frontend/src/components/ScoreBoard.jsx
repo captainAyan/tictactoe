@@ -11,7 +11,7 @@ export default function ScoreBoard({
         <p className="player-name" title={`${player1Name || "..."} (O)`}>
           {player1Name || "..."}
         </p>
-        <p className="player-score">{player1Score}</p>
+        <p className="player-score">{player1Score ?? "-"}</p>
       </div>
       <span className="vs">vs</span>
 
@@ -19,7 +19,7 @@ export default function ScoreBoard({
         <p className="player-name" title={`${player2Name || "..."} (X)`}>
           {player2Name || "..."}
         </p>
-        <p className="player-score">{player2Score}</p>
+        <p className="player-score">{player2Score ?? "-"}</p>
       </div>
     </div>
   );
