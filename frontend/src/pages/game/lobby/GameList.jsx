@@ -28,7 +28,10 @@ export default function GameList({ setGame }) {
     axios
       .get(GET_GAME_URL + gameId, authConfig(token))
       .then(({ data }) => setGame(data))
-      .catch((error) => console.log("error", error))
+      .catch((error) => {
+        if (error.response.status === 404)
+          setGames(games.filter((game) => game.id !== gameId));
+      })
       .finally(() => setIsLoading(false));
   };
 

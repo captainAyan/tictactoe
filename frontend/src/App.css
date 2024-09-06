@@ -14,6 +14,7 @@
   --not-your-turn: #F4B400; */
   --wait: #f7a4a4;
   --play: #b4c9a7;
+  --expired: #f56f6f;
   --your-turn: #b4c9a7;
   --not-your-turn: #f4b400;
 }
@@ -160,6 +161,9 @@ span.game-status.wait {
 }
 span.game-status.play {
   background-color: var(--play);
+}
+span.game-status.expired {
+  background-color: var(--expired);
 }
 span.game-status.your-turn {
   background-color: var(--your-turn);

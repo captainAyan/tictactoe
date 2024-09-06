@@ -7,7 +7,7 @@ import useStore from "../../../store";
 import Board from "./Board";
 import ScoreBoard from "../../../components/ScoreBoard";
 
-export default function Play({ game, goToLobby }) {
+export default function Play({ game, goToLobby, hasExpired }) {
   const { token, user } = useStore((state) => state);
 
   // if player2 is null, then the state is waiting
@@ -77,10 +77,12 @@ export default function Play({ game, goToLobby }) {
       </button>
       <span
         style={{ marginRight: "8px" }}
-        className={`game-status ${isPlaying ? "play" : "wait"}`}
+        className={`game-status ${
+          hasExpired ? "expired" : isPlaying ? "play" : "wait"
+        }`}
         title={isPlaying ? "Opponent has joined" : "Wait for opponent to join"}
       >
-        {isPlaying ? "🚀 Play" : "⏳ Wait"}
+        {hasExpired ? "⛔ Expired" : isPlaying ? "🚀 Play" : "⏳ Wait"}
       </span>
 
       {isPlaying ? (

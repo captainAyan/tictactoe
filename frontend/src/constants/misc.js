@@ -21,4 +21,5 @@ export const NotificationType = {
   MOVE: "move",
   REMATCH_REQUEST: "rematch_request",
   REMATCH_RESPONSE: "rematch_response",
+  GAME_EXPIRE: "game_expire",
 };

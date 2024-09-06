@@ -17,6 +17,7 @@ export default function Game() {
 
   const [currentNotification, setCurrentNotification] = useState(null);
   const [currentGameState, setCurrentGameState] = useState(GameState.LOBBY);
+  const [hasExpired, setHasExpired] = useState(false);
 
   const handleLogout = () => {
     localStorage.setItem("token", "");
@@ -116,6 +117,13 @@ export default function Game() {
       ) {
         console.log("received request of rematch");
         setGame(currentNotification.payload);
+      } else if (
+        currentNotification.type === NotificationType.GAME_EXPIRE &&
+        game &&
+        game.id === currentNotification.payload.id
+      ) {
+        console.log("game expired");
+        setHasExpired(true);
       }
     }
   }, [currentNotification]);
@@ -131,6 +139,8 @@ export default function Game() {
       } else {
         setCurrentGameState(GameState.SCORE);
       }
+
+      setHasExpired(false); // reset
     }
   }, [game]);
 
@@ -167,7 +177,7 @@ export default function Game() {
         {currentGameState === GameState.LOBBY ? (
           <Lobby setGame={setGame} />
         ) : currentGameState === GameState.PLAY ? (
-          <Play game={game} goToLobby={goToLobby} />
+          <Play game={game} goToLobby={goToLobby} hasExpired={hasExpired} />
         ) : currentGameState === GameState.SCORE ? (
           <Score setGame={setGame} game={game} goToLobby={goToLobby} />
         ) : null}
