@@ -1,10 +1,10 @@
+const {
+  NotificationType,
+  GameExpirationSchedulerPreference,
+} = require("./constants");
 const Game = require("./Game");
 const { startScheduler } = require("./taskScheduler");
 const { userSocketsList } = require("./userSocketsManager");
-
-const EXPIRATION_DURATION_OF_ACTIVE_GAME = 120000;
-const EXPIRATION_DURATION_OF_FINISHED_GAME = 240000;
-const SCHEDULER_DELAY = 30000;
 
 const gameList = new Map();
 
@@ -22,11 +22,11 @@ function removeExpiredGames(
       if (gameList.get(key).player1)
         userSocketsList
           .get(gameList.get(key).player1.id)
-          .notify("game_expire", game);
+          .notify(NotificationType.GAME_EXPIRE, game);
       if (gameList.get(key).player2)
         userSocketsList
           .get(gameList.get(key).player2.id)
-          .notify("game_expire", game);
+          .notify(NotificationType.GAME_EXPIRE, game);
 
       gameList.delete(key);
     }
@@ -38,11 +38,11 @@ function addGame(game) {
   startScheduler(
     () =>
       removeExpiredGames(
-        EXPIRATION_DURATION_OF_ACTIVE_GAME,
-        EXPIRATION_DURATION_OF_FINISHED_GAME
+        GameExpirationSchedulerPreference.EXPIRATION_DURATION_OF_ACTIVE_GAME,
+        GameExpirationSchedulerPreference.EXPIRATION_DURATION_OF_FINISHED_GAME
       ),
     () => gameList.size > 0,
-    SCHEDULER_DELAY
+    GameExpirationSchedulerPreference.SCHEDULER_DELAY
   );
   return game;
 }

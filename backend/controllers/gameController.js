@@ -9,6 +9,7 @@ const {
 const { userSocketsList } = require("../util/userSocketsManager");
 const { ErrorResponse } = require("../middlewares/errorMiddleware");
 const Game = require("../util/Game");
+const { NotificationType } = require("../util/constants");
 
 const getGames = (req, res, next) => {
   const games = getGamesByPlayerId(req.user.id);
@@ -68,8 +69,12 @@ const joinGame = (req, res, next) => {
   if (!game.sessionData.score[req.user.id])
     game.sessionData.score[req.user.id] = 0;
 
-  userSocketsList.get(game.player1.id).notify("player_join", game);
-  userSocketsList.get(game.player2.id).notify("player_join", game);
+  userSocketsList
+    .get(game.player1.id)
+    .notify(NotificationType.PLAYER_JOIN, game);
+  userSocketsList
+    .get(game.player2.id)
+    .notify(NotificationType.PLAYER_JOIN, game);
   res.json(game);
 };
 
@@ -91,8 +96,8 @@ const addMove = (req, res, next) => {
     throw new ErrorResponse(error.message, StatusCodes.BAD_REQUEST);
   }
 
-  userSocketsList.get(game.player1.id).notify("move", game);
-  userSocketsList.get(game.player2.id).notify("move", game);
+  userSocketsList.get(game.player1.id).notify(NotificationType.MOVE, game);
+  userSocketsList.get(game.player2.id).notify(NotificationType.MOVE, game);
   res.json(game);
 };
 
@@ -124,7 +129,9 @@ const createRematchGame = (req, res, next) => {
     newGame.rematch.requesteeId = game.player2.id;
 
     // notifying the other player (non-initiator of the rematch)
-    userSocketsList.get(game.player2.id).notify("rematch_request", game);
+    userSocketsList
+      .get(game.player2.id)
+      .notify(NotificationType.REMATCH_REQUEST, game);
   }
   // else if rematch initiator is player2, make them player1
   else if (game.player2.id === req.user.id) {
@@ -135,11 +142,15 @@ const createRematchGame = (req, res, next) => {
     newGame.rematch.requesteeId = game.player1.id;
 
     // notifying the other player (non-initiator of the rematch)
-    userSocketsList.get(game.player1.id).notify("rematch_request", game);
+    userSocketsList
+      .get(game.player1.id)
+      .notify(NotificationType.REMATCH_REQUEST, game);
   }
 
   /// sending the newGame to the rematch initiator
-  userSocketsList.get(req.user.id).notify("rematch_response", newGame);
+  userSocketsList
+    .get(req.user.id)
+    .notify(NotificationType.REMATCH_RESPONSE, newGame);
 
   res.json(newGame);
 };
