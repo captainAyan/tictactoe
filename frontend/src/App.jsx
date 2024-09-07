@@ -30,8 +30,7 @@ export default function App() {
           login(data, token);
         })
         .catch(() => {
-          localStorage.setItem("token", "");
-          logout();
+          handleLogout();
         });
   }, [token, login, logout]);
 
