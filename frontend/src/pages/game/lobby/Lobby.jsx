@@ -16,21 +16,19 @@ export default function Lobby({ setGame }) {
     <>
       <div className="tab-btn-container">
         <button
-          className={`btn tab-btn ${currentTab === Tab.NEW ? "active" : ""}`}
+          className={`btn tab-btn ${currentTab === Tab.NEW && "active"}`}
           onClick={() => setCurrentTab(Tab.NEW)}
         >
           New
         </button>
         <button
-          className={`btn tab-btn ${currentTab === Tab.GAMES ? "active" : ""}`}
+          className={`btn tab-btn ${currentTab === Tab.GAMES && "active"}`}
           onClick={() => setCurrentTab(Tab.GAMES)}
         >
           Games
         </button>
         <button
-          className={`btn tab-btn ${
-            currentTab === Tab.PROFILE ? "active" : ""
-          }`}
+          className={`btn tab-btn ${currentTab === Tab.PROFILE && "active"}`}
           onClick={() => setCurrentTab(Tab.PROFILE)}
         >
           Profile

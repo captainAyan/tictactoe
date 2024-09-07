@@ -40,7 +40,7 @@ export default function GameList({ setGame }) {
   return (
     <div>
       <h2>Games</h2>
-      {isLoading ? "Loading..." : ""}
+      {isLoading && "Loading..."}
       <p className="warning">{errorMessage}</p>
 
       {games.length === 0 ? (

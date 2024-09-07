@@ -179,13 +179,13 @@ export default function Game() {
         </button>
       </div>
       <div>
-        {currentGameState === GameState.LOBBY ? (
-          <Lobby setGame={setGame} />
-        ) : currentGameState === GameState.PLAY ? (
+        {currentGameState === GameState.LOBBY && <Lobby setGame={setGame} />}
+        {currentGameState === GameState.PLAY && (
           <Play game={game} goToLobby={goToLobby} hasExpired={hasExpired} />
-        ) : currentGameState === GameState.SCORE ? (
+        )}
+        {currentGameState === GameState.SCORE && (
           <Score setGame={setGame} game={game} goToLobby={goToLobby} />
-        ) : null}
+        )}
       </div>
     </div>
   );

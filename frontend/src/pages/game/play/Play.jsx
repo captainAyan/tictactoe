@@ -97,7 +97,7 @@ export default function Play({ game, goToLobby, hasExpired }) {
         </span>
       ) : null}
 
-      <span>{isLoading ? "Loading..." : ""}</span>
+      <span>{isLoading && "Loading..."}</span>
 
       <hr />
       <Board board={game.board} buttonHandler={boardButtonHandler} />
