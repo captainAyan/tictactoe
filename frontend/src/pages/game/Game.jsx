@@ -6,7 +6,7 @@ import Play from "./play/Play";
 import Score from "./score/Score";
 import { DOMAIN } from "../../constants/api";
 import useStore from "../../store";
-import { GameResult, GameState, NotificationType } from "../../constants/misc";
+import { GameResult, NotificationType } from "../../constants/misc";
 
 export default function Game() {
   const SOCKET_SERVER_URL = `${DOMAIN}/notification`;
@@ -15,8 +15,14 @@ export default function Game() {
 
   const [game, setGame] = useState(null);
 
-  const [currentNotification, setCurrentNotification] = useState(null);
+  // States
+  /// Lobby - You can join or create a game
+  /// Play  - You're playing
+  /// Score - game is over, and score is being displayed
+  const GameState = { LOBBY: "l", PLAY: "p", SCORE: "s" };
   const [currentGameState, setCurrentGameState] = useState(GameState.LOBBY);
+
+  const [currentNotification, setCurrentNotification] = useState(null);
   const [hasExpired, setHasExpired] = useState(false);
 
   const handleLogout = () => {
@@ -172,7 +178,6 @@ export default function Game() {
           Logout
         </button>
       </div>
-      <hr />
       <div>
         {currentGameState === GameState.LOBBY ? (
           <Lobby setGame={setGame} />

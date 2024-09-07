@@ -39,41 +39,46 @@ export default function GameList({ setGame }) {
 
   return (
     <div>
-      {games?.length !== 0 ? <h2>Games</h2> : null}
+      <h2>Games</h2>
       {isLoading ? "Loading..." : ""}
       <p className="warning">{errorMessage}</p>
-      <>
-        {games.map((game) => {
-          return (
-            <div className="match-up" key={game.id}>
-              <span
-                title={game.player1?.username}
-                className="player-name"
-                id="player1"
-              >
-                {game.player1?.username || "..."}
-              </span>
-              <span className="vs">vs</span>
-              <span
-                title={game.player2?.username}
-                className="player-name"
-                id="player1"
-              >
-                {game.player2?.username || "..."}
-              </span>
 
-              <div className="btn-container">
-                <button
-                  onClick={() => fetchAndSetGame(game.id)}
-                  className="btn accent-btn small-btn"
+      {games.length === 0 ? (
+        <h1 className="empty">No Games</h1>
+      ) : (
+        <div style={{ height: "256px", overflowY: "scroll" }}>
+          {games.map((game) => {
+            return (
+              <div className="match-up" key={game.id}>
+                <span
+                  title={game.player1?.username}
+                  className="player-name"
+                  id="player1"
                 >
-                  Re-enter
-                </button>
+                  {game.player1?.username || "..."}
+                </span>
+                <span className="vs">vs</span>
+                <span
+                  title={game.player2?.username}
+                  className="player-name"
+                  id="player1"
+                >
+                  {game.player2?.username || "..."}
+                </span>
+
+                <div className="btn-container">
+                  <button
+                    onClick={() => fetchAndSetGame(game.id)}
+                    className="btn accent-btn small-btn"
+                  >
+                    Re-enter
+                  </button>
+                </div>
               </div>
-            </div>
-          );
-        })}
-      </>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }

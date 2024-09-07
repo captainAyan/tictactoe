@@ -69,6 +69,20 @@ a.accent-link {
   align-items: center;
   margin: 0px 0px 20px 0px
 }
+
+h1 {
+  margin: 0px 0px 28px 0px;
+  font-size: 36px;
+}
+
+h1.empty {
+  display: flex;
+  justify-content: center;
+  min-height: 256px;
+  align-items: center;
+  color: #ccc;
+}
+
 .header > h2 {
   margin: 0px;
 }
@@ -119,10 +133,18 @@ input:focus {
 .accent-btn:hover {
   background-color: var(--accent-dark);
 }
-
-h1 {
-  margin: 0px 0px 28px 0px;
-  font-size: 36px;
+.tab-btn-container {
+  display: flex;
+}
+.tab-btn {
+  padding: 12px 0px;
+  color: var(--primary);
+  background-color: white;
+  flex: 1;
+  border-bottom: 4px solid var(--accent-dark)
+}
+.tab-btn.active {
+  border-bottom: 4px solid var(--primary);
 }
 
 label {
