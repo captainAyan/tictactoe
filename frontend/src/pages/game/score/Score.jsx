@@ -67,9 +67,10 @@ export default function Score({ game, goToLobby }) {
         player2Score={game.sessionData?.score[game.player2?._id]}
         userIsPlayer1={game.player1?._id === user.id}
       />
-
       <h1 className="result-message">{message}</h1>
       <p className="warning">{errorMessage}</p>
+
+      {game.rematch.newGameId && <p>Rematch has been requested</p>}
 
       {game.rematch.newGameId ? (
         <button
@@ -88,7 +89,6 @@ export default function Score({ game, goToLobby }) {
           Rematch Request
         </button>
       )}
-
       <button className="btn accent-btn large-btn" onClick={goToLobby}>
         Back to Lobby
       </button>
