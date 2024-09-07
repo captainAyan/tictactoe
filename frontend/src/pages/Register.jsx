@@ -12,7 +12,7 @@ export default function Register() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [responseData, setResponseData] = useState();
-  const [error, setError] = useState();
+  const [errorMessage, setErrorMessage] = useState();
 
   const { token, user, login } = useStore((state) => state);
 
@@ -27,14 +27,14 @@ export default function Register() {
     if (token && user) {
       navigate("/");
     }
-  }, [user, token, error, responseData, navigate, login]);
+  }, [user, token, responseData, navigate, login]);
 
   const handleSubmit = (userData) => {
     setIsLoading(true);
     axios
       .post(REGISTER_URL, userData)
       .then(({ data }) => setResponseData(data))
-      .catch((error) => setError(error.response.data.error.message))
+      .catch((error) => setErrorMessage(error.response.data.error.message))
       .finally(() => setIsLoading(false));
   };
 
@@ -95,7 +95,7 @@ export default function Register() {
                 </span>
               </div>
 
-              <p className="warning">{error}</p>
+              <p className="warning">{errorMessage}</p>
 
               <button
                 className={`${

@@ -8,6 +8,7 @@ import useStore from "../../../store";
 export default function GameList({ setGame }) {
   const { token } = useStore((state) => state);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [games, setGames] = useState([]);
 
@@ -19,7 +20,7 @@ export default function GameList({ setGame }) {
         console.log(data);
         setGames(data);
       })
-      .catch((error) => console.log("error", error))
+      .catch((error) => setErrorMessage(error.response.data.error.message))
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -29,6 +30,7 @@ export default function GameList({ setGame }) {
       .get(GET_GAME_URL + gameId, authConfig(token))
       .then(({ data }) => setGame(data))
       .catch((error) => {
+        setErrorMessage(error.response.data.error.message);
         if (error.response.status === 404)
           setGames(games.filter((game) => game.id !== gameId));
       })
@@ -39,6 +41,7 @@ export default function GameList({ setGame }) {
     <div>
       {games?.length !== 0 ? <h2>Games</h2> : null}
       {isLoading ? "Loading..." : ""}
+      <p className="warning">{errorMessage}</p>
       <>
         {games.map((game) => {
           return (

@@ -8,7 +8,7 @@ import { GameIdSchema } from "../../../util/gameIdValidationSchema";
 import useStore from "../../../store";
 
 export default function JoinGame({ setGame }) {
-  const [error, setError] = useState();
+  const [errorMessage, setErrorMessage] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
   const { token } = useStore((state) => state);
@@ -20,7 +20,7 @@ export default function JoinGame({ setGame }) {
     axios
       .put(JOIN_GAME_URL + gameId, {}, authConfig(token))
       .then(({ data }) => setGame(data))
-      .catch((error) => setError(error.response.data.error.message))
+      .catch((error) => setErrorMessage(error.response.data.error.message))
       .finally(() => setIsLoading(false));
   };
 
@@ -48,7 +48,7 @@ export default function JoinGame({ setGame }) {
               </span>
             </div>
 
-            <p className="warning">{error}</p>
+            <p className="warning">{errorMessage}</p>
             <button
               className="btn large-btn primary-btn"
               type="submit"

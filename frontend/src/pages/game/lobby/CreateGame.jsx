@@ -6,7 +6,7 @@ import authConfig from "../../../util/authConfig";
 import useStore from "../../../store";
 
 export default function CreateGame({ setGame }) {
-  const [error, setError] = useState();
+  const [errorMessage, setErrorMessage] = useState();
   const [isLoading, setIsLoading] = useState(false);
 
   const { token } = useStore((state) => state);
@@ -17,14 +17,14 @@ export default function CreateGame({ setGame }) {
     axios
       .post(BASE_URL + "/game", {}, authConfig(token))
       .then(({ data }) => setGame(data))
-      .catch((error) => setError(error.response.data.error.message))
+      .catch((error) => setErrorMessage(error.response.data.error.message))
       .finally(() => setIsLoading(false));
   };
 
   return (
     <div>
       <h2>Create Game</h2>
-      <p className="warning">{error}</p>
+      <p className="warning">{errorMessage}</p>
       <button
         className={`btn primary-btn`}
         disabled={isLoading}

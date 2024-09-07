@@ -12,7 +12,7 @@ export default function Login() {
 
   const [isLoading, setIsLoading] = useState(false);
   const [responseData, setResponseData] = useState();
-  const [error, setError] = useState();
+  const [errorMessage, setErrorMessage] = useState();
 
   const { token, user, login } = useStore((state) => state);
 
@@ -34,7 +34,7 @@ export default function Login() {
     axios
       .post(LOGIN_URL, userData)
       .then(({ data }) => setResponseData(data))
-      .catch((error) => setError(error.response.data.error.message))
+      .catch((error) => setErrorMessage(error.response.data.error.message))
       .finally(() => setIsLoading(false));
   };
 
@@ -81,7 +81,7 @@ export default function Login() {
                 </span>
               </div>
 
-              <p className="warning">{error}</p>
+              <p className="warning">{errorMessage}</p>
 
               <button
                 className={`${

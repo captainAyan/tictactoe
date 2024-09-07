@@ -12,6 +12,7 @@ export default function Score({ game, goToLobby }) {
 
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const rematchRequestHandler = () => {
     setIsLoading(true);
@@ -22,7 +23,7 @@ export default function Score({ game, goToLobby }) {
       .then(({ data }) => {
         console.log(data);
       })
-      .catch((error) => console.log("error", error))
+      .catch((error) => setErrorMessage(error.response.data.error.message))
       .finally(() => setIsLoading(false));
   };
 
@@ -36,7 +37,7 @@ export default function Score({ game, goToLobby }) {
       .then(({ data }) => {
         console.log(data);
       })
-      .catch((error) => console.log("error", error))
+      .catch((error) => setErrorMessage(error.response.data.error.message))
       .finally(() => setIsLoading(false));
   };
 
@@ -68,6 +69,7 @@ export default function Score({ game, goToLobby }) {
       />
 
       <h1 className="result-message">{message}</h1>
+      <p className="warning">{errorMessage}</p>
 
       {game.rematch.newGameId ? (
         <button
