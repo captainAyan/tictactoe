@@ -19,14 +19,16 @@ function removeExpiredGames(
         game.result === Game.Result.PENDING) ||
       new Date() - new Date(game.timestamp) > expirationDurationOfFinishedGame
     ) {
-      if (gameList.get(key).player1)
+      const game = gameList.get(key);
+
+      if (game.player1)
         userSocketsList
-          .get(gameList.get(key).player1.id)
-          .notify(NotificationType.GAME_EXPIRE, game);
-      if (gameList.get(key).player2)
+          .get(game.player1.id)
+          ?.notify(NotificationType.GAME_EXPIRE, game);
+      if (game.player2)
         userSocketsList
-          .get(gameList.get(key).player2.id)
-          .notify(NotificationType.GAME_EXPIRE, game);
+          .get(game.player2.id)
+          ?.notify(NotificationType.GAME_EXPIRE, game);
 
       gameList.delete(key);
     }
