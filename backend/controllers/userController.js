@@ -7,7 +7,6 @@ const { ErrorResponse } = require("../middlewares/errorMiddleware");
 
 const {
   createSchema,
-  editSchema,
   passwordChangeSchema,
 } = require("../util/userValidationSchema");
 const generateToken = require("../util/tokenGenerator");
@@ -92,33 +91,6 @@ const getProfile = asyncHandler(async (req, res, next) => {
   res.status(StatusCodes.OK).json(response);
 });
 
-const editProfile = asyncHandler(async (req, res, next) => {
-  const { error } = editSchema.validate(req.body);
-
-  if (error)
-    throw new ErrorResponse("Invalid input error", StatusCodes.BAD_REQUEST);
-
-  const { username } = req.body;
-
-  const user = await User.findById(req.user.id).select("-password");
-
-  const userWithEmailExists = await User.findOne({ username });
-
-  if (user.username !== username && userWithEmailExists)
-    throw new ErrorResponse("Email is taken", StatusCodes.BAD_REQUEST);
-
-  user.username = username;
-
-  await user.save();
-
-  const response = {
-    id: user.id,
-    username: user.username,
-  };
-
-  res.status(StatusCodes.OK).json(response);
-});
-
 const changePassword = asyncHandler(async (req, res, next) => {
   const { error } = passwordChangeSchema.validate(req.body);
 
@@ -163,7 +135,6 @@ module.exports = {
   login,
   register,
   getProfile,
-  editProfile,
   changePassword,
   deleteProfile,
 };

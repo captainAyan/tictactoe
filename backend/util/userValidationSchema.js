@@ -26,14 +26,6 @@ const createSchema = Joi.object({
     .required(),
 });
 
-const editSchema = Joi.object({
-  username: Joi.string()
-    .min(1)
-    .max(USER_USERNAME_MAX_LENGTH)
-    .lowercase()
-    .required(),
-});
-
 const passwordChangeSchema = Joi.object({
   oldPassword: Joi.string().required(),
   newPassword: Joi.string()
@@ -44,6 +36,5 @@ const passwordChangeSchema = Joi.object({
 
 module.exports = {
   createSchema,
-  editSchema,
   passwordChangeSchema,
 };
