@@ -3,6 +3,8 @@
   --primary-dark: #7b85e2;
   --accent: white;
   --accent-dark: #f0f0f0;
+  --danger: #f13838;
+  --danger-dark: #d12e2e;
   --warning: #F78688;
   --input-background: #f2f2f2;
   --separator: #ebebeb;
@@ -83,6 +85,11 @@ h1.empty {
   color: #ccc;
 }
 
+h1.result-message {
+  margin: 36px;
+  text-align: center;
+}
+
 .header > h2 {
   margin: 0px;
 }
@@ -132,6 +139,13 @@ input:focus {
 }
 .accent-btn:hover {
   background-color: var(--accent-dark);
+}
+.danger-btn {
+  background-color: var(--danger);
+  color: white;
+}
+.danger-btn:hover {
+  background-color: var(--danger-dark);
 }
 .tab-btn-container {
   display: flex;
@@ -192,10 +206,6 @@ span.game-status.your-turn {
 }
 span.game-status.not-your-turn {
   background-color: var(--not-your-turn);
-}
-h1.result-message {
-  margin: 36px;
-  text-align: center;
 }
 
 .board-btn-container {
@@ -287,6 +297,19 @@ h1.result-message {
   font-size: 20px;
 }
 
-.avatar {
+
+.profile-container {
+  text-align: center;
+}
+.profile-container > .avatar {
   box-shadow: 0px 10px 20px 4px rgb(0 0 0 / 20%);
+  border-radius: 16px;
+}
+.profile-container > .username {
+  margin: 20px 0px 0px 0px;
+}
+.profile-container > .user-id {
+  color: #ccc;
+  font-size: 14px;
+  margin-top: 8px;
 }
