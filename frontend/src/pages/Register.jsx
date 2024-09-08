@@ -98,10 +98,9 @@ export default function Register() {
               <p className="warning">{errorMessage}</p>
 
               <button
-                className={`${
-                  isLoading ? "loading" : ""
-                } btn large-btn primary-btn`}
+                className="btn large-btn primary-btn"
                 type="submit"
+                disabled={isLoading}
               >
                 Register
               </button>
