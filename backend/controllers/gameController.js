@@ -12,8 +12,8 @@ const Game = require("../util/Game");
 const { NotificationType } = require("../util/constants");
 
 const getGames = (req, res, next) => {
-  const games = getGamesByPlayerId(req.user.id);
-  res.json(games);
+  const oldToNewGames = getGamesByPlayerId(req.user.id);
+  res.json(oldToNewGames.reverse());
 };
 
 const getGame = (req, res, next) => {
