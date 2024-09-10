@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Game from "./pages/game/Game";
+import _404 from "./pages/404";
 
 import AuthProtectedRoute from "./components/AuthProtectedRoute";
 import { GET_PROFILE_URL } from "./constants/api";
@@ -50,6 +51,7 @@ export default function App() {
             />
             <Route path="login" element={<Login />} />
             <Route path="register" element={<Register />} />
+            <Route path="*" element={<_404 />} />
           </Routes>
         </BrowserRouter>
       </div>
