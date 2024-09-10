@@ -80,7 +80,13 @@ export default function Play({ game, goToLobby, hasExpired }) {
         className={`game-status ${
           hasExpired ? "expired" : isPlaying ? "play" : "wait"
         }`}
-        title={isPlaying ? "Opponent has joined" : "Wait for opponent to join"}
+        title={
+          hasExpired
+            ? "Game has expired"
+            : isPlaying
+            ? "Opponent has joined"
+            : "Wait for opponent to join"
+        }
       >
         {hasExpired ? "⛔ Expired" : isPlaying ? "🚀 Play" : "⏳ Wait"}
       </span>
