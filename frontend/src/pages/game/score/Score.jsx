@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import confetti from "canvas-confetti";
 
 import useStore from "../../../store";
 import { GameResult } from "../../../constants/misc";
@@ -13,6 +14,16 @@ export default function Score({ game, goToLobby }) {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const [hasConfettiBeenShown, setHasConfettiBeenShown] = useState(false);
+
+  const triggerConfetti = () => {
+    confetti({
+      particleCount: 100,
+      spread: 70,
+      origin: { y: 0.6 },
+    });
+  };
 
   const rematchRequestHandler = () => {
     setIsLoading(true);
@@ -55,6 +66,11 @@ export default function Score({ game, goToLobby }) {
       if (gameDraw) setMessage("Game is Draw");
       else if (playerWon) setMessage("You Won 🎉");
       else setMessage("You Lose 😥");
+
+      if (playerWon && !hasConfettiBeenShown) {
+        setHasConfettiBeenShown(true);
+        triggerConfetti();
+      }
     }
   }, [game]);
 
