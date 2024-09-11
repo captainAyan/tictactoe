@@ -67,7 +67,7 @@ export default function Score({ game, goToLobby }) {
       else if (playerWon) setMessage("You Won 🎉");
       else setMessage("You Lose 😥");
 
-      if (playerWon && !hasConfettiBeenShown) {
+      if (playerWon && !gameDraw && !hasConfettiBeenShown) {
         setHasConfettiBeenShown(true);
         triggerConfetti();
       }
