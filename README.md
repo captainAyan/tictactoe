@@ -9,7 +9,9 @@
   </p>
 </p>
 
-<img src="https://github.com/captainayan/tictactoe/blob/main/assets/gameplay.gif?raw=true"/>
+<p align="center">
+  <img src="https://github.com/captainayan/tictactoe/blob/main/assets/gameplay.gif?raw=true"/>
+</p>
 
 ## About
 Welcome to our Open-Source, Online, Real-Time, Multiplayer Tic Tac Toe game, where classic gameplay meets cutting-edge technology! Built with MERN stack & Socket.IO, this game delivers a seamless and engaging experience right in your browser.
